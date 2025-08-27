@@ -3,14 +3,23 @@
     background-color: var(--accent);
     display: flex;
     justify-content: center;
-    gap: .5em;
     height: 100%;
     border-top: 1px solid var(--bg-elem);
 
     &__link {
-        color: var(--bg-elem);
+        box-sizing: border-box;
+        padding: .25em .5em;
+        background-color: var(--bg-elem);
+        color: var(--accent);
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
+        border-radius: .5em;
+    }
+
+    & nav {
+        height: fit-content;
+        display: flex;
+        gap: .75em;
     }
 }
