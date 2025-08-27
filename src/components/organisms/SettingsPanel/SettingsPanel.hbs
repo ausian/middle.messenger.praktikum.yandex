@@ -1,0 +1,34 @@
+  <div class="settings-panel">
+    <div class="settings-panel__wrapper settings-panel__wrapper--top">
+      {{#ifEquals state "chat"}}
+        {{> Button
+          id="new-chat-button"
+          class="settings-panel__button"
+          type="button"
+          icon=icons.chatAdd
+        }}
+      {{/ifEquals}}
+      {{#ifEquals state "settings"}}
+        {{> Button
+          id="settings-panel__button-back"
+          class="settings-panel__button"
+          type="button"
+          icon=icons.arrowBack
+        }}
+      {{/ifEquals}}
+    </div>
+    <div class="settings-panel__wrapper settings-panel__wrapper--bottom">
+      {{> Button
+        id="settings-panel__button-logout"
+        class="settings-panel__button"
+        type="button"
+        icon=icons.logout
+      }}
+      {{> Button
+        id="settings-panel__button-settings"
+        class="settings-panel__button"
+        type="button"
+        icon=icons.settings
+      }}
+    </div>
+  </div>

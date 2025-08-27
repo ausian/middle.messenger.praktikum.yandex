@@ -1,0 +1,21 @@
+.list {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+    width: 100%;
+    box-sizing: border-box;
+
+    &__item {
+        box-sizing: border-box;
+        padding: .75em 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--bg);
+    }
+
+    &__item-name {
+        font-weight: 600;
+    }
+}
