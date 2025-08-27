@@ -2,7 +2,7 @@ import Handlebars from "handlebars";
 import * as Pages from "./pages";
 import * as Components from "./components";
 import * as Icons from "./assets/icons";
-import renderHbs from "./helpers/renderHBS";
+import renderHbs from "./helpers/renderHbs";
 
 Handlebars.registerPartial("Input", Components.Input);
 Handlebars.registerPartial("Button", Components.Button);
