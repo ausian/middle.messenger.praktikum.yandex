@@ -48,12 +48,14 @@ const ERROR_PAGES = {
     text: "Уже чиним",
   },
 };
+
 const COMMON_ICONS = {
   chatAdd: Icons.ChatAdd,
   logout: Icons.Logout,
   settings: Icons.Settings,
   arrowBack: Icons.ArrowBack,
 };
+
 const PAGES_TEMPLATES = {
   login: Pages.LoginPage,
   register: Pages.RegisterPage,
@@ -63,47 +65,58 @@ const PAGES_TEMPLATES = {
   500: Pages.Page404,
 };
 
+function getPageFromPath(path) {
+  const slug = path.startsWith("/") ? path.slice(1) : path;
+  if (!slug) return "login";
+  if (pages.some((p) => p.slug === slug)) return slug;
+  return "404";
+}
+
+function navigateTo(slug) {
+  window.history.pushState({ page: slug }, "", "/" + slug);
+}
+
 export default class App {
   constructor() {
     this.state = {
-      currentPage: "settings",
+      currentPage: getPageFromPath(window.location.pathname),
       token: [],
       settingsPage: {
         isEdit: false,
         isEditPassword: false,
         options: [
           {
-            name: "Имя",
+            labelList: "Имя",
             value: "Иван",
-            id: "name",
+            id: "first_name",
           },
           {
-            name: "Фамилия",
+            labelList: "Фамилия",
             value: "Иванов",
-            id: "surname",
+            id: "second_name",
           },
           {
-            name: "Ник",
+            labelList: "Ник",
             value: "user777",
-            id: "nik",
+            id: "display_name",
           },
           {
-            name: "Email",
-            value: "user777@yandex.ru",
+            labelList: "Email",
+            value: "user777@yandex.ru ",
             id: "email",
           },
           {
-            name: "Телефон",
+            labelList: "Телефон",
             value: "8 800 555 3 555",
-            id: "tel",
+            id: "phone",
           },
           {
-            name: "Логин",
+            labelList: "Логин",
             value: "user777",
             id: "login",
           },
           {
-            name: "Пароль",
+            labelList: "Пароль",
             buttonName: "Сменить",
             isButton: true,
             id: "password-button",
@@ -111,19 +124,28 @@ export default class App {
         ],
         passwordOptions: [
           {
-            name: "Старый пароль",
-            id: "password-old",
-            isEdit: true
+            labelList: "Старый пароль",
+            placeholder: 'Введите пароль',
+            id: "oldPassword",
+            isEdit: true,
           },
           {
-            name: "Новый пароль",
-            id: "password-new", 
-            isEdit: true
+            labelList: "Новый пароль",
+            placeholder: 'Введите новый пароль',
+            id: "newPassword",
+            isEdit: true,
           },
         ],
       },
     };
     this.appElement = document.getElementById("app");
+
+    window.addEventListener("popstate", (event) => {
+      const path = window.location.pathname;
+      const page = getPageFromPath(path);
+      this.state.currentPage = page;
+      this.render();
+    });
   }
 
   render() {
@@ -133,7 +155,7 @@ export default class App {
     if (ERROR_PAGES[this.state.currentPage]) {
       ctx.settingsPanel = {
         state: "settings",
-        icons: COMMON_ICONS
+        icons: COMMON_ICONS,
       };
       ctx.page = ERROR_PAGES[this.state.currentPage];
       const leftPanel = renderHbs(Components.SettingsPanel, ctx.settingsPanel);
@@ -165,7 +187,6 @@ export default class App {
       };
 
       let mainArea;
-
       if (this.state.currentPage === "chat") {
         mainArea =
           renderHbs(Components.MessageList) + renderHbs(Components.MessageArea);
@@ -175,9 +196,9 @@ export default class App {
           avatarSrc:
             "https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           userName: `${
-            sPage.options.find((o) => o.id === "name")?.value || ""
+            sPage.options.find((o) => o.id === "first_name")?.value || ""
           } ${
-            sPage.options.find((o) => o.id === "surname")?.value || ""
+            sPage.options.find((o) => o.id === "second_name")?.value || ""
           }`.trim(),
           options: sPage.options.map((item) => ({
             ...item,
@@ -189,6 +210,7 @@ export default class App {
         };
         mainArea = renderHbs(Components.SettingsArea, ctx.settingsArea);
       }
+
       const leftPanel = renderHbs(Components.SettingsPanel, ctx.settingsPanel);
       html = Handlebars.compile(PAGES_TEMPLATES[this.state.currentPage])({
         leftPanel,
@@ -199,13 +221,13 @@ export default class App {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     const nodes = Array.from(doc.body.childNodes);
+
     this.appElement.replaceChildren(...nodes);
     this.attachEventListeners();
   }
 
   attachEventListeners() {
     const page = this.state.currentPage;
-
     const setClick = (id, cb) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener("click", cb);
@@ -229,6 +251,9 @@ export default class App {
       setClick("settings-panel__button-logout", () => {
         this.goToPage("login");
       });
+      setClick("settings-panel__button-back", () => {
+        this.goToPage("chat");
+      });
     }
     if (page === "settings") {
       const sPage = this.state.settingsPage;
@@ -250,7 +275,6 @@ export default class App {
           this.render();
         });
       }
-
       setClick("password-button", () => {
         sPage.isEditPassword = true;
         this.render();
@@ -271,7 +295,6 @@ export default class App {
         this.goToPage("login");
       });
     }
-
     pages.forEach((page) =>
       setClick(`${page.slug}-link`, (e) => {
         e.preventDefault();
@@ -281,7 +304,9 @@ export default class App {
   }
 
   goToPage(page) {
-    this.state.currentPage = page;
+    const pageSlug = getPageFromPath("/" + page);
+    this.state.currentPage = pageSlug;
+    navigateTo(pageSlug);
     this.render();
   }
 }
