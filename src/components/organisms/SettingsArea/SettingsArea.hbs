@@ -1,0 +1,48 @@
+<div class="settings-area">
+  {{> Avatar src=avatarSrc}}
+  <h1 class="settings-area__user-name">{{userName}}</h1>
+  {{#unless isEditPassword}}
+    {{> List
+      items=options
+      className="settings-area__options"
+    }}
+  {{/unless}}
+  {{#if isEditPassword}}
+    {{> List
+      items=passwordOptions
+      className="settings-area__options"
+    }}
+  {{/if}}
+  <div class="settings-area__buttons-wrapper">
+    {{#if (or isEdit isEditPassword)}}
+      {{> Button
+        type='button'
+        id='settings__button-back'
+        text='Назад'
+      }}
+      {{#if isEdit}}
+        {{> Button
+          type='button'
+          id='settings__button-save'
+          class="button--primary"
+          text='Сохранить'
+        }}
+      {{/if}}
+      {{#if isEditPassword}}
+        {{> Button
+          type='button'
+          id='settings__password-save'
+          class="button--primary"
+          text='Сохранить пароль'
+        }}
+      {{/if}}
+    {{else}}
+      {{> Button
+        type='button'
+        id='settings__button-edit'
+        class="button--primary"
+        text='Редактировать'
+      }}
+    {{/if}}
+  </div>
+</div>

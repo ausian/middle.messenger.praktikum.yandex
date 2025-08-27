@@ -2,7 +2,7 @@
 :root {
     --bg: #EFEFEF;
     --bg-elem: #fff;
-    --accent: #000;
+    --accent: #161616;
     --color: #000;
     --color-hide: #A0A0A0;
     --color-error: #640120;
@@ -17,6 +17,7 @@ body {
     color: var(--color);
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
@@ -49,17 +50,6 @@ h3 {
     width: 100%;
     gap: .5em;
 }
-.layout--auth {
-    width: 100vw;
-    height: 100vh;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25em;
-    background-color: var(--bg);
-}
 .u-text-center {
     text-align: center;
 }
@@ -68,4 +58,10 @@ h3 {
     font-weight: 400;
     color: var(--color-hide);
     text-align: left;
+}
+.layout {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg);
 }
