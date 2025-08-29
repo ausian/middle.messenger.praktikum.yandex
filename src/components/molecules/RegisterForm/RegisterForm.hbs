@@ -5,14 +5,17 @@
         {{> Input
           class="input__control--gray"
           name="first_name"
+          id="first_name"
           type="name"
           placeholder="Ваше имя*"
           label="Имя*"
           error="Поле обязательно для заполнения"
+          autocomplete=true
         }}
         {{> Input
           class="input__control--gray"
           name="second_name"
+          id="second_name"
           type="name"
           placeholder="Ваша фамилия"
           label="Фамилия"
@@ -20,6 +23,7 @@
         {{> Input
           class="input__control--gray"
           name="login"
+          id="login"
           type="text"
           placeholder="Ваш логин"
           label="Логин*"
@@ -28,14 +32,17 @@
         {{> Input
           class="input__control--gray"
           name="email"
+          id="email"
           type="email"
           placeholder="Ваш Email*"
           label="Email*"
           error="Email уже используется"
+          autocomplete=true
         }}
         {{> Input
           class="input__control--gray"
           name="password"
+          id="password"
           type="password"
           placeholder="Ваш пароль*"
           label="Пароль*"
@@ -44,10 +51,12 @@
         {{> Input
           class="input__control--gray"
           name="phone"
+          id="phone"
           type="phone"
           placeholder="Ваш телефон"
           label="Телефон"
           error="Не верный телефон"
+          autocomplete=true
         }}
       </div>
     </div>

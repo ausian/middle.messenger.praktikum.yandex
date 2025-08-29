@@ -1,6 +1,6 @@
 export { Input } from './atoms/Input';
 export { Button } from './atoms/Button';
-export { Avatar } from './atoms/Avatar';
+export { AvatarProfile } from './atoms/AvatarProfile';
 
 export { LoginForm } from './molecules/LoginForm';
 export { RegisterForm } from './molecules/RegisterForm';
