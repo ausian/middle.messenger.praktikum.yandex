@@ -89,6 +89,7 @@ export default class App {
             labelList: "Имя",
             value: "Иван",
             id: "first_name",
+            autocomplete: true,
           },
           {
             labelList: "Фамилия",
@@ -104,11 +105,13 @@ export default class App {
             labelList: "Email",
             value: "user777@yandex.ru ",
             id: "email",
+            autocomplete: true,
           },
           {
             labelList: "Телефон",
             value: "8 800 555 3 555",
             id: "phone",
+            autocomplete: true,
           },
           {
             labelList: "Логин",
