@@ -14,7 +14,7 @@ Handlebars.registerPartial("AuthLayout", Components.AuthLayout);
 Handlebars.registerPartial("LoginForm", Components.LoginForm);
 Handlebars.registerPartial("RegisterForm", Components.RegisterForm);
 Handlebars.registerPartial("SettingsArea", Components.SettingsArea);
-Handlebars.registerPartial("Avatar", Components.Avatar);
+Handlebars.registerPartial("AvatarProfile", Components.AvatarProfile);
 Handlebars.registerPartial("List", Components.List);
 Handlebars.registerPartial("Footer", Components.Footer);
 Handlebars.registerPartial("ErrorBanner", Components.ErrorBanner);
@@ -195,6 +195,7 @@ export default class App {
         ctx.settingsArea = {
           avatarSrc:
             "https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          iconPhoto: Icons.Photo,
           userName: `${
             sPage.options.find((o) => o.id === "first_name")?.value || ""
           } ${

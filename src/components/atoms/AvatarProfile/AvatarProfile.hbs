@@ -1,0 +1,17 @@
+<label class="avatar-profile" for="avatar">
+    {{#if src}}
+        <img class="avatar-profile__image" src={{src}} alt="Аватар пользователя" />
+        <div class="avatar-profile__download avatar-profile__download--hover">
+            <div class="avatar-profile__download-icon">
+                {{{icon}}}
+            </div>
+        </div>
+    {{else}}
+        <div class="avatar-profile__download">
+            <div class="avatar-profile__download-icon">
+                {{{icon}}}
+            </div>
+        </div>
+    {{/if}}
+    <input type="file" name="avatar" id="avatar" hidden />
+</label>
