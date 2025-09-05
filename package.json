@@ -16,8 +16,10 @@
     "build": "vite build",
     "start": "vite build && node server.cjs",
     "preview": "vite preview",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint": "eslint . --ext .ts,.js,.cjs,.mjs",
+    "lint:fix": "eslint . --ext .ts,.js,.cjs,.mjs --fix",
+    "lint:css": "stylelint \"src/**/*.{css,pcss,scss}\"",
+    "lint:fix:css": "stylelint \"src/**/*.{css,pcss,scss}\" --fix"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.18.0",
@@ -30,11 +32,15 @@
     "postcss-nested": "^7.0.2",
     "postcss-preset-env": "^10.2.4",
     "prettier": "^3.6.2",
+    "stylelint": "^16.9.0",
+    "stylelint-config-standard": "^36.0.1",
+    "stylelint-order": "^6.0.4",
     "typescript": "^5.5.4",
     "vite": "^7.1.2"
   },
   "dependencies": {
     "express": "^5.1.0",
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "postcss-reporter": "^7.1.0"
   }
 }

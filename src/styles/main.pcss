@@ -1,67 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 :root {
-    --bg: #EFEFEF;
-    --bg-elem: #fff;
-    --accent: #161616;
-    --color: #000;
-    --color-hide: #A0A0A0;
-    --color-error: #640120;
-    --radius: 1.25em;
+  --bg: #efefef;
+  --bg-elem: #fff;
+  --accent: #161616;
+  --color: #000;
+  --color-hide: #a0a0a0;
+  --color-error: #640120;
+  --radius: 1.25em;
 }
+
 body {
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-size: 16px;
-    font-style: normal;
-    color: var(--color);
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  color: var(--color);
+  font-family: Inter, sans-serif;
+  font-optical-sizing: auto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
 }
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    margin: 0;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  margin: 0;
 }
+
 h1 {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
+
 h2 {
-    font-size: 1.25em;
+  font-size: 1.25em;
 }
+
 h3 {
-    font-size: 1em;
+  font-size: 1em;
 }
+
 .card {
-    background-color: var(--bg-elem);
-    padding: 1.25em;
-    border-radius: var(--radius);
-    box-sizing: border-box;
+  background-color: var(--bg-elem);
+  border-radius: var(--radius);
+  box-sizing: border-box;
+  padding: 1.25em;
 }
+
 .wrapper--gap-max {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 1.25em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  width: 100%;
 }
+
 .wrapper--gap-min {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: .5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 100%;
 }
+
 .u-text-center {
-    text-align: center;
+  text-align: center;
 }
+
 .label {
-    font-size: .75em;
-    font-weight: 400;
-    color: var(--color-hide);
-    text-align: left;
+  color: var(--color-hide);
+  font-size: 0.75em;
+  font-weight: 400;
+  text-align: left;
 }
+
 .layout {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: var(--bg);
+  background-color: var(--bg);
+  height: 100vh;
+  overflow: hidden;
+  width: 100vw;
 }

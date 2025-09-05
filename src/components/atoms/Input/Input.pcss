@@ -4,12 +4,12 @@
     gap: .25em;
 
     &__control {
-        width: 100%;
-        height: 35px;
-        padding: .5em 1.5em;
+        border: none;
         border-radius: var(--radius);
         box-sizing: border-box;
-        border: none;
+        height: 35px;
+        padding: .5em 1.5em;
+        width: 100%;
 
         &--gray {
             background-color: var(--bg);
@@ -18,9 +18,10 @@
         &::placeholder {
             color: var(--color-hide);
         }
+
         &:focus {
-            outline: none;
             border: none;
+            outline: none;
         }
     }
 
