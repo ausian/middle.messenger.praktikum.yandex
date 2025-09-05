@@ -14,4 +14,4 @@ export { SettingsPanel } from './organisms/SettingsPanel/index.ts';
 export { MessageList } from './organisms/MessageList/index.ts';
 export { MessageArea } from './organisms/MessageArea/index.ts';
 export { SettingsArea } from './organisms/SettingsArea/index.ts';
-export { Footer } from './organisms/Footer/index.ts'
+export { Footer } from './organisms/Footer/index.ts';

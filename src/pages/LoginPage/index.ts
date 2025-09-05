@@ -1,2 +1,3 @@
-export { default as LoginPage } from './LoginPage.hbs?raw';
 import './LoginPage.pcss';
+
+export { default as LoginPage } from './LoginPage.hbs?raw';
