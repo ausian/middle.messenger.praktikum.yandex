@@ -19,14 +19,17 @@ Handlebars.registerPartial('List', Components.List);
 Handlebars.registerPartial('Footer', Components.Footer);
 Handlebars.registerPartial('ErrorBanner', Components.ErrorBanner);
 
-Handlebars.registerHelper('ifEquals', function (
-  this: Record<string, unknown>,
-  arg1: string | number,
-  arg2: string | number,
-  options: Handlebars.HelperOptions,
-) {
-  return arg1 === arg2 ? options.fn(this) : options.inverse(this);
-});
+Handlebars.registerHelper(
+  'ifEquals',
+  function (
+    this: Record<string, unknown>,
+    arg1: string | number,
+    arg2: string | number,
+    options: Handlebars.HelperOptions,
+  ) {
+    return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+  },
+);
 Handlebars.registerHelper('and', (a, b) => a && b);
 Handlebars.registerHelper('or', function (...args: unknown[]) {
   return args.slice(0, -1).some(Boolean);
@@ -224,20 +227,21 @@ export default class App {
         mainArea,
       });
     } else if (
-      this.state.currentPage === 'login'
-      || this.state.currentPage === 'register'
+      this.state.currentPage === 'login' ||
+      this.state.currentPage === 'register'
     ) {
-      const component = this.state.currentPage === 'login'
-        ? Components.LoginForm
-        : Components.RegisterForm;
+      const component =
+        this.state.currentPage === 'login'
+          ? Components.LoginForm
+          : Components.RegisterForm;
       const childrenHTML = renderHbs(component);
       html = Handlebars.compile(PAGES_TEMPLATES[this.state.currentPage])({
         pageClass: `${this.state.currentPage}-page`,
         children: childrenHTML,
       });
     } else if (
-      this.state.currentPage === 'chat'
-      || this.state.currentPage === 'settings'
+      this.state.currentPage === 'chat' ||
+      this.state.currentPage === 'settings'
     ) {
       ctx.settingsPanel = {
         state: this.state.currentPage,
@@ -246,7 +250,8 @@ export default class App {
 
       let mainArea;
       if (this.state.currentPage === 'chat') {
-        mainArea = renderHbs(Components.MessageList) + renderHbs(Components.MessageArea);
+        mainArea =
+          renderHbs(Components.MessageList) + renderHbs(Components.MessageArea);
       } else {
         const sPage = this.state.settingsPage;
         ctx.settingsArea = {
@@ -254,9 +259,11 @@ export default class App {
             'https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           iconPhoto: Icons.Photo,
           userName: `${
-            sPage.options.find((o: Option) => o.id === 'first_name')?.value || ''
+            sPage.options.find((o: Option) => o.id === 'first_name')?.value ||
+            ''
           } ${
-            sPage.options.find((o: Option) => o.id === 'second_name')?.value || ''
+            sPage.options.find((o: Option) => o.id === 'second_name')?.value ||
+            ''
           }`.trim(),
           options: sPage.options.map((item: Option) => ({
             ...item,
@@ -286,7 +293,10 @@ export default class App {
 
   attachEventListeners() {
     const page = this.state.currentPage;
-    const setClick = (id: string, cb: (this: HTMLElement, ev: MouseEvent) => any) => {
+    const setClick = (
+      id: string,
+      cb: (this: HTMLElement, ev: MouseEvent) => any,
+    ) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener('click', cb);
     };
@@ -322,7 +332,9 @@ export default class App {
             .querySelectorAll('.list__item .input__control')
             .forEach((selector) => {
               const { id } = selector;
-              const option = sPage.options.find((item: Option) => item.id === id);
+              const option = sPage.options.find(
+                (item: Option) => item.id === id,
+              );
               if (option) option.value = (selector as HTMLInputElement).value;
             });
           this.render();
@@ -353,10 +365,12 @@ export default class App {
         this.goToPage('login');
       });
     }
-    pages.forEach((p) => setClick(`${p.slug}-link`, (e) => {
-      e.preventDefault();
-      this.goToPage(p.slug);
-    }));
+    pages.forEach((p) =>
+      setClick(`${p.slug}-link`, (e) => {
+        e.preventDefault();
+        this.goToPage(p.slug);
+      }),
+    );
   }
 
   goToPage(page: string): void {
