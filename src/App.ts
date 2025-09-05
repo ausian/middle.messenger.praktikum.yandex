@@ -1,8 +1,8 @@
 import Handlebars from "handlebars";
-import * as Pages from "./pages";
-import * as Components from "./components";
-import * as Icons from "./assets/icons";
-import renderHbs from "./helpers/renderHbs";
+import * as Pages from "./pages/index.ts";
+import * as Components from "./components/index.ts";
+import * as Icons from "./assets/icons/index.ts";
+import renderHbs from "./helpers/renderHbs.ts";
 
 Handlebars.registerPartial("Input", Components.Input);
 Handlebars.registerPartial("Button", Components.Button);
@@ -19,7 +19,12 @@ Handlebars.registerPartial("List", Components.List);
 Handlebars.registerPartial("Footer", Components.Footer);
 Handlebars.registerPartial("ErrorBanner", Components.ErrorBanner);
 
-Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
+Handlebars.registerHelper("ifEquals", function (
+  this: Record<string, unknown>,
+  arg1: string | number,
+  arg2: string | number,
+  options: Handlebars.HelperOptions
+) {
   return arg1 === arg2 ? options.fn(this) : options.inverse(this);
 });
 Handlebars.registerHelper("and", function (a, b) {
@@ -29,7 +34,56 @@ Handlebars.registerHelper("or", function () {
   return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
 });
 
-const pages = [
+type PageSlug = "login" | "register" | "chat" | "settings" | "404" | "500";
+type Error = "404" | "500";
+
+interface Page {
+  slug: PageSlug;
+};
+interface ErrorPage {
+  code: Error;
+  text: string;
+};
+interface Option {
+  labelList: string;
+  value?: string;
+  placeholder?: string;
+  buttonName?: string;
+  isButton?: boolean;
+  id: string;
+  autocomplete?: boolean;
+  isEdit?: boolean;
+};
+
+interface State {
+  currentPage: PageSlug;
+  token: string[];
+  settingsPage: {
+    isEdit: boolean;
+    isEditPassword: boolean;
+    options: Option[];
+    passwordOptions: Option[];
+  };
+}
+
+interface RenderContext {
+  settingsPanel?: {
+    state: string;
+    icons: Record<string, string>;
+  };
+  page?: ErrorPage | undefined;
+  settingsArea?: {
+    avatarSrc: string;
+    iconPhoto: string;
+    userName: string;
+    options: Option[];
+    passwordOptions: Option[];
+    isEdit: boolean;
+    isEditPassword: boolean;
+  };
+}
+
+const pages: Page[] = [
   { slug: "login" },
   { slug: "register" },
   { slug: "chat" },
@@ -38,7 +92,8 @@ const pages = [
   { slug: "500" },
 ];
 
-const ERROR_PAGES = {
+
+const ERROR_PAGES: Record<Error, ErrorPage> = {
   404: {
     code: "404",
     text: "Не туда попали",
@@ -49,14 +104,14 @@ const ERROR_PAGES = {
   },
 };
 
-const COMMON_ICONS = {
+const COMMON_ICONS: Record<string, string> = {
   chatAdd: Icons.ChatAdd,
   logout: Icons.Logout,
   settings: Icons.Settings,
   arrowBack: Icons.ArrowBack,
 };
 
-const PAGES_TEMPLATES = {
+const PAGES_TEMPLATES: Record<PageSlug, string> = {
   login: Pages.LoginPage,
   register: Pages.RegisterPage,
   chat: Pages.ChatPage,
@@ -65,18 +120,21 @@ const PAGES_TEMPLATES = {
   500: Pages.Page404,
 };
 
-function getPageFromPath(path) {
+function getPageFromPath(path: string): PageSlug {
   const slug = path.startsWith("/") ? path.slice(1) : path;
   if (!slug) return "login";
-  if (pages.some((p) => p.slug === slug)) return slug;
+  if (pages.some((p) => p.slug === slug)) return slug as PageSlug;
   return "404";
 }
 
-function navigateTo(slug) {
+function navigateTo(slug: string): void {
   window.history.pushState({ page: slug }, "", "/" + slug);
 }
 
 export default class App {
+  state: State;
+  appElement: HTMLElement | null;
+
   constructor() {
     this.state = {
       currentPage: getPageFromPath(window.location.pathname),
@@ -152,17 +210,17 @@ export default class App {
   }
 
   render() {
-    let html = "";
-    const ctx = {};
+    let html: string = "";
+    const ctx: RenderContext = {};
 
-    if (ERROR_PAGES[this.state.currentPage]) {
+    if (this.state.currentPage === "404" || this.state.currentPage === "500") {
       ctx.settingsPanel = {
         state: "settings",
         icons: COMMON_ICONS,
       };
       ctx.page = ERROR_PAGES[this.state.currentPage];
-      const leftPanel = renderHbs(Components.SettingsPanel, ctx.settingsPanel);
-      const mainArea = renderHbs(Components.ErrorBanner, ctx.page);
+      const leftPanel = renderHbs(Components.SettingsPanel, ctx.settingsPanel as {});
+      const mainArea = renderHbs(Components.ErrorBanner, ctx.page as {});
       html = Handlebars.compile(PAGES_TEMPLATES[this.state.currentPage])({
         leftPanel,
         mainArea,
@@ -200,11 +258,11 @@ export default class App {
             "https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           iconPhoto: Icons.Photo,
           userName: `${
-            sPage.options.find((o) => o.id === "first_name")?.value || ""
+            sPage.options.find((o: Option) => o.id === "first_name")?.value || ""
           } ${
-            sPage.options.find((o) => o.id === "second_name")?.value || ""
+            sPage.options.find((o: Option) => o.id === "second_name")?.value || ""
           }`.trim(),
-          options: sPage.options.map((item) => ({
+          options: sPage.options.map((item: Option) => ({
             ...item,
             isEdit: sPage.isEdit,
           })),
@@ -212,10 +270,10 @@ export default class App {
           isEdit: sPage.isEdit,
           isEditPassword: sPage.isEditPassword,
         };
-        mainArea = renderHbs(Components.SettingsArea, ctx.settingsArea);
+        mainArea = renderHbs(Components.SettingsArea, ctx.settingsArea as {});
       }
 
-      const leftPanel = renderHbs(Components.SettingsPanel, ctx.settingsPanel);
+      const leftPanel = renderHbs(Components.SettingsPanel, ctx.settingsPanel as {});
       html = Handlebars.compile(PAGES_TEMPLATES[this.state.currentPage])({
         leftPanel,
         mainArea,
@@ -226,13 +284,13 @@ export default class App {
     const doc = parser.parseFromString(html, "text/html");
     const nodes = Array.from(doc.body.childNodes);
 
-    this.appElement.replaceChildren(...nodes);
+    if (this.appElement) this.appElement.replaceChildren(...nodes);
     this.attachEventListeners();
   }
 
   attachEventListeners() {
     const page = this.state.currentPage;
-    const setClick = (id, cb) => {
+    const setClick = (id: string, cb: (this: HTMLElement, ev: MouseEvent) => any) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener("click", cb);
     };
@@ -268,8 +326,8 @@ export default class App {
             .querySelectorAll(".list__item .input__control")
             .forEach((selector) => {
               const id = selector.id;
-              const option = sPage.options.find((item) => item.id === id);
-              if (option) option.value = selector.value;
+              const option = sPage.options.find((item: Option) => item.id === id);
+              if (option) option.value = (selector as HTMLInputElement).value;
             });
           this.render();
         });
@@ -307,7 +365,7 @@ export default class App {
     );
   }
 
-  goToPage(page) {
+  goToPage( page: string): void {
     const pageSlug = getPageFromPath("/" + page);
     this.state.currentPage = pageSlug;
     navigateTo(pageSlug);
