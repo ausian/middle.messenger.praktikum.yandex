@@ -1,8 +1,8 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import avatarTemplate from './Avatar.hbs?raw';
 import './Avatar.pcss';
 
-interface AvatarProps {
+interface AvatarProps extends BlockProps {
   src?: string | undefined;
   author?: string | undefined;
   initial?: string | undefined;

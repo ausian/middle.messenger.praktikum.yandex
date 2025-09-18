@@ -1,4 +1,4 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Input } from '../../atoms/Input/index.ts';
 import { Button } from '../../atoms/Button/index.ts';
 import listTemplate from './List.hbs?raw';
@@ -14,12 +14,16 @@ export interface ListItem {
   isEdit?: boolean;
 }
 
-interface ListProps {
+interface ListProps extends BlockProps {
   className?: string;
   items: ListItem[];
 }
 
-class SpanValueBlock extends Block<{ text: string }> {
+interface SpanValueProps extends BlockProps {
+  text: string;
+}
+
+class SpanValueBlock extends Block<SpanValueProps> {
   constructor(text: string) {
     super({ text });
   }

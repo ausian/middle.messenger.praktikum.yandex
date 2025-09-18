@@ -16,8 +16,8 @@
     "build": "vite build",
     "start": "vite build && node server.cjs",
     "preview": "vite preview",
-    "lint": "eslint . --ext .ts,.js,.cjs,.mjs",
-    "lint:fix": "eslint . --ext .ts,.js,.cjs,.mjs --fix",
+    "lint": "tsc --noEmit && eslint . --ext .ts,.js,.cjs,.mjs",
+    "lint:fix": "tsc --noEmit && eslint . --ext .ts,.js,.cjs,.mjs --fix",
     "lint:css": "stylelint \"src/**/*.{css,pcss,scss}\"",
     "lint:fix:css": "stylelint \"src/**/*.{css,pcss,scss}\" --fix"
   },

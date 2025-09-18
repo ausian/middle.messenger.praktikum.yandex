@@ -23,7 +23,6 @@ export class RegisterForm extends Block {
         type: 'text',
         placeholder: 'Ваше имя*',
         label: 'Имя*',
-        autocomplete: true,
       }),
       SecondNameInput: new Input({
         class: 'input__control--gray',
@@ -48,7 +47,6 @@ export class RegisterForm extends Block {
         type: 'email',
         placeholder: 'Ваш Email*',
         label: 'Email*',
-        autocomplete: true,
       }),
       PasswordInput: new Input({
         class: 'input__control--gray',
@@ -65,7 +63,6 @@ export class RegisterForm extends Block {
         type: 'tel',
         placeholder: 'Ваш телефон',
         label: 'Телефон',
-        autocomplete: true,
       }),
       RegisterButton: new Button({
         class: 'button--primary',

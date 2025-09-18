@@ -1,10 +1,10 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Button } from '../../atoms/Button/index.ts';
 import settingsPanelTemplate from './SettingsPanel.hbs?raw';
 import { app } from '../../../App.ts';
 import './SettingsPanel.pcss';
 
-interface SettingsPanelProps {
+interface SettingsPanelProps extends BlockProps {
   state: 'chat' | 'settings';
   icons: {
     chatAdd: string;

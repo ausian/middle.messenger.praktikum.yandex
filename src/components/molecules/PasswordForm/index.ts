@@ -1,4 +1,4 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Input } from '../../atoms/Input/index.ts';
 import { Button } from '../../atoms/Button/index.ts';
 import passwordFormTemplate from './PasswordForm.hbs?raw';
@@ -6,7 +6,7 @@ import getFormDataFromButton from '../../../utils/getFormDataFromButton.ts';
 import './PasswordForm.pcss';
 import FormValidator from '../../../utils/FormValidator.ts';
 
-export interface PasswordFormProps {
+export interface PasswordFormProps extends BlockProps {
   onSave?: (event: Event) => void;
   onCancel?: (event: Event) => void;
 }

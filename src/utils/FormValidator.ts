@@ -108,8 +108,9 @@ export default class FormValidator {
 
     if (input) {
       const isMessageField = name === 'message';
-      const originalPlaceholder = (input as any)?.props?.placeholderPersistent;
-      const currentPlaceholder = (input as any)?.props?.placeholder;
+      const currentProps = input.getProps();
+      const originalPlaceholder = currentProps.placeholderPersistent;
+      const currentPlaceholder = currentProps.placeholder;
 
       input.setProps({
         error: error ?? undefined,
@@ -118,11 +119,11 @@ export default class FormValidator {
           isMessageField && error
             ? error
             : isMessageField
-              ? (originalPlaceholder ?? currentPlaceholder)
+              ? originalPlaceholder ?? currentPlaceholder
               : currentPlaceholder,
         hideError: isMessageField
           ? Boolean(error)
-          : (input as any)?.props?.hideError,
+          : currentProps.hideError ?? undefined,
       });
     }
 

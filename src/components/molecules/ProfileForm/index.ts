@@ -1,4 +1,4 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Input } from '../../atoms/Input/index.ts';
 import { Button } from '../../atoms/Button/index.ts';
 import profileFormTemplate from './ProfileForm.hbs?raw';
@@ -6,7 +6,7 @@ import getFormDataFromButton from '../../../utils/getFormDataFromButton.ts';
 import './ProfileForm.pcss';
 import FormValidator from '../../../utils/FormValidator.ts';
 
-export interface ProfileFormProps {
+export interface ProfileFormProps extends BlockProps {
   firstName?: string;
   secondName?: string;
   displayName?: string;

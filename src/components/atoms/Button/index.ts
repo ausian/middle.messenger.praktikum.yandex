@@ -1,8 +1,8 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import ButtonTemplate from './Button.hbs?raw';
 import './Button.pcss';
 
-type ButtonProps = {
+interface ButtonProps extends BlockProps {
   text?: string;
   id: string;
   type: string;
@@ -10,9 +10,7 @@ type ButtonProps = {
   icon?: string;
   active?: boolean;
   onClick?: (e: Event) => void | ((e: MouseEvent) => void);
-  events?: Record<string, EventListener>;
-  attr?: Record<string, string>;
-};
+}
 
 export class Button extends Block<ButtonProps> {
   constructor(props: ButtonProps) {
