@@ -2,14 +2,12 @@ import EventBus from './EventBus.ts';
 import type { EventCallback } from './EventBus.ts';
 import Handlebars from 'handlebars';
 
-export type BlockRecord = Record<string, Block<any, any, any>>;
-export type BlockLists = Record<string, Array<Block<any, any, any> | string>>;
+export interface BlockProps extends Record<string, unknown> {
+  attr?: Record<string, unknown>;
+  events?: Record<string, EventListenerOrEventListenerObject>;
+}
 
-export default class Block<
-  TProps extends Record<string, any> = Record<string, any>,
-  TChildren extends Record<string, Block<any, any, any>> = Record<string, any>,
-  TLists extends BlockLists = Record<string, any[]>,
-> {
+export default class Block<TProps extends BlockProps = BlockProps> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -23,19 +21,19 @@ export default class Block<
 
   protected props: TProps;
 
-  protected children: TChildren;
+  protected children: BlockRecord;
 
-  protected lists: TLists;
+  protected lists: BlockLists;
 
   protected eventBus: () => EventBus;
 
-  constructor(propsWithChildren: Partial<TProps & TChildren & TLists> = {}) {
+  constructor(propsWithChildren: Partial<TProps> = {}) {
     const eventBus = new EventBus();
     const { props, children, lists } =
       this._getChildrenPropsAndProps(propsWithChildren);
     this.props = this._makePropsProxy({ ...props }) as TProps;
-    this.children = children as TChildren;
-    this.lists = this._makePropsProxy({ ...lists }) as TLists;
+    this.children = children;
+    this.lists = this._makePropsProxy({ ...lists }) as BlockLists;
 
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
@@ -93,11 +91,9 @@ export default class Block<
     return true;
   }
 
-  private _getChildrenPropsAndProps(
-    input: Partial<TProps & TChildren & TLists>,
-  ) {
+  private _getChildrenPropsAndProps(input: Partial<TProps>) {
     const children: BlockRecord = {};
-    const props: Record<string, any> = {};
+    const props: Record<string, unknown> = {};
     const lists: BlockLists = {};
 
     Object.entries(input).forEach(([key, value]) => {
@@ -118,13 +114,13 @@ export default class Block<
     Object.assign(this.props, nextProps);
   }
 
-  public setLists(nextLists: Partial<TLists>): void {
+  public setLists(nextLists: Partial<BlockLists>): void {
     if (!nextLists) return;
     Object.assign(this.lists, nextLists);
   }
 
   private _render(): void {
-    const propsAndStubs: Record<string, any> = { ...this.props };
+    const propsAndStubs: Record<string, unknown> = { ...this.props };
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
@@ -134,18 +130,18 @@ export default class Block<
       propsAndStubs[key] = this.lists[key];
     });
 
-    const fragment = this._createDocumentElement('template');
-    fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
+    const templateString = Handlebars.compile(this.render())(propsAndStubs);
+    const fragment = this._createFragmentFromTemplate(templateString);
 
     Object.values(this.children).forEach((child) => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+      const stub = fragment.querySelector(`[data-id="${child._id}"]`);
       if (stub) stub.replaceWith(child.getContent());
     });
 
     Object.entries(this.lists).forEach(([, arr]) => {
       arr.forEach((item) => {
         if (item instanceof Block) {
-          const stub = fragment.content.querySelector(
+          const stub = fragment.querySelector(
             `[data-id="${item._id}"]`,
           );
           if (stub) stub.replaceWith(item.getContent());
@@ -153,7 +149,7 @@ export default class Block<
       });
     });
 
-    const newElement = fragment.content.firstElementChild as HTMLElement;
+    const newElement = fragment.firstElementChild as HTMLElement;
     if (this._element && newElement) this._element.replaceWith(newElement);
     this._element = newElement;
     this._addEvents();
@@ -170,16 +166,18 @@ export default class Block<
   }
 
   private _addEvents(): void {
-    const { events = {} } = this.props as any;
-    Object.keys(events).forEach((eventName) => {
-      this._element?.addEventListener(eventName, events[eventName]);
+    const { events = {} } = this.props;
+
+    Object.entries(events).forEach(([eventName, handler]) => {
+      this._element?.addEventListener(eventName, handler);
     });
   }
 
   protected addAttributes(): void {
-    const { attr = {} } = this.props as any;
-    Object.entries(attr).forEach(([key, value]) => {
-      this._element?.setAttribute(key, String(value));
+    Object.entries(this.props.attr ?? {}).forEach(([key, value]) => {
+      if (value !== undefined) {
+        this._element?.setAttribute(key, String(value));
+      }
     });
   }
 
@@ -193,15 +191,15 @@ export default class Block<
     });
   }
 
-  private _makePropsProxy(props: any): any {
+  private _makePropsProxy<T extends Record<string, unknown>>(props: T): T {
     return new Proxy(props, {
       get: (target, prop: string) => {
-        const value = target[prop];
+        const value = target[prop as keyof T];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target, prop: string, value) => {
+      set: (target, prop: string, value: unknown) => {
         const oldTarget = { ...target };
-        target[prop] = value;
+        target[prop as keyof T] = value as T[keyof T];
         this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
       },
@@ -211,8 +209,16 @@ export default class Block<
     });
   }
 
-  private _createDocumentElement(tagName: string): HTMLTemplateElement {
-    return document.createElement(tagName) as HTMLTemplateElement;
+  private _createFragmentFromTemplate(templateString: string): DocumentFragment {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(templateString, 'text/html');
+    const fragment = document.createDocumentFragment();
+
+    while (doc.body.firstChild) {
+      fragment.appendChild(doc.body.firstChild);
+    }
+
+    return fragment;
   }
 
   public show(): void {
@@ -226,4 +232,11 @@ export default class Block<
   get element(): HTMLElement | null {
     return this._element;
   }
+
+  public getProps(): Readonly<TProps> {
+    return this.props;
+  }
 }
+
+export type BlockRecord = Record<string, Block>;
+export type BlockLists = Record<string, unknown[]>;

@@ -1,9 +1,9 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import AuthLayout from './AuthLayout.hbs?raw';
 import { Footer } from '../../organisms/Footer/index.ts';
 import './AuthLayout.pcss';
 
-interface AuthLayoutProps {
+interface AuthLayoutProps extends BlockProps {
   pageClass: string;
   children: Block | Block[];
   Footer?: Block;

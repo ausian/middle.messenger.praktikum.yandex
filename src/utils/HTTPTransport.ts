@@ -1,5 +1,17 @@
 type QueryParams = Record<string, string | number | boolean | null | undefined>;
 
+enum HttpMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
+
+const HEADER_CONTENT_TYPE = 'Content-Type';
+const APPLICATION_JSON = 'application/json';
+const TEXT_PLAIN_UTF8 = 'text/plain;charset=UTF-8';
+const NETWORK_ERROR_MESSAGE = 'Network error';
+
 class HttpClient {
   private baseUrl: string;
 
@@ -8,20 +20,19 @@ class HttpClient {
   }
 
   get<T = unknown>(url: string, query?: QueryParams): Promise<T> {
-    const fullUrl = this.buildUrl(url, query);
-    return this.send<T>('GET', fullUrl);
+    return this.send<T>(HttpMethod.GET, this.buildUrl(url, query));
   }
 
   post<T = unknown>(url: string, data?: unknown): Promise<T> {
-    return this.send<T>('POST', this.baseUrl + url, data);
+    return this.send<T>(HttpMethod.POST, this.buildUrl(url), data);
   }
 
   put<T = unknown>(url: string, data?: unknown): Promise<T> {
-    return this.send<T>('PUT', this.baseUrl + url, data);
+    return this.send<T>(HttpMethod.PUT, this.buildUrl(url), data);
   }
 
   delete<T = unknown>(url: string, data?: unknown): Promise<T> {
-    return this.send<T>('DELETE', this.baseUrl + url, data);
+    return this.send<T>(HttpMethod.DELETE, this.buildUrl(url), data);
   }
 
   private buildUrl(url: string, query?: QueryParams): string {
@@ -42,19 +53,15 @@ class HttpClient {
     return endpoint + (endpoint.includes('?') ? '&' : '?') + qs;
   }
 
-  private send<T>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    url: string,
-    data?: unknown,
-  ): Promise<T> {
+  private send<T>(method: HttpMethod, url: string, data?: unknown): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 400) {
-          const ct = xhr.getResponseHeader('Content-Type') || '';
-          if (ct.includes('application/json')) {
+          const ct = xhr.getResponseHeader(HEADER_CONTENT_TYPE) || '';
+          if (ct.includes(APPLICATION_JSON)) {
             try {
               resolve(JSON.parse(xhr.responseText) as T);
             } catch {
@@ -68,9 +75,9 @@ class HttpClient {
         }
       };
 
-      xhr.onerror = () => reject(new Error('Network error'));
+      xhr.onerror = () => reject(new Error(NETWORK_ERROR_MESSAGE));
 
-      if (method === 'GET' || data == null) {
+      if (method === HttpMethod.GET || data == null) {
         xhr.send();
         return;
       }
@@ -81,12 +88,12 @@ class HttpClient {
       }
 
       if (typeof data === 'string') {
-        xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+        xhr.setRequestHeader(HEADER_CONTENT_TYPE, TEXT_PLAIN_UTF8);
         xhr.send(data);
         return;
       }
 
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_JSON);
       xhr.send(JSON.stringify(data));
     });
   }

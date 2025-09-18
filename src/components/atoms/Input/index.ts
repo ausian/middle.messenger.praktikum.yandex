@@ -1,8 +1,8 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import InputTemplate from './Input.hbs?raw';
 import './Input.pcss';
 
-type InputProps = {
+interface InputProps extends BlockProps {
   name: string;
   id: string;
   type: string;
@@ -12,8 +12,8 @@ type InputProps = {
   error?: string | undefined;
   value?: string | undefined;
   class?: string | undefined;
-  hideError?: boolean;
-};
+  hideError?: boolean | undefined;
+}
 
 export class Input extends Block<InputProps> {
   constructor(props: InputProps) {

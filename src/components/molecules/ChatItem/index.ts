@@ -1,9 +1,9 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Avatar } from '../../atoms/Avatar/index.ts';
 import chatItemTemplate from './ChatItem.hbs?raw';
 import './ChatItem.pcss';
 
-export interface ChatItemProps {
+export interface ChatItemProps extends BlockProps {
   author: string;
   text: string;
   time?: string;
@@ -11,8 +11,6 @@ export interface ChatItemProps {
   avatar?: string;
   active?: boolean;
   initial?: string;
-  events?: Record<string, EventListener>;
-  attr?: Record<string, string>;
 }
 
 export class ChatItem extends Block<ChatItemProps> {

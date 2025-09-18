@@ -1,8 +1,8 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import avatarProfileTemplate from './AvatarProfile.hbs?raw';
 import './AvatarProfile.pcss';
 
-export interface AvatarProfileProps {
+export interface AvatarProfileProps extends BlockProps {
   src?: string;
   icon: string;
   onChange?: (e: Event) => void;

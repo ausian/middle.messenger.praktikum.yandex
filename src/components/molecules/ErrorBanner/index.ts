@@ -1,9 +1,9 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Button } from '../../atoms/Button/index.ts';
 import errorBannerTemplate from './ErrorBanner.hbs?raw';
 import './ErrorBanner.pcss';
 
-interface ErrorBannerProps {
+interface ErrorBannerProps extends BlockProps {
   code: string;
   text: string;
 }

@@ -1,4 +1,4 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import {
   AvatarProfile,
   type AvatarProfileProps,
@@ -14,7 +14,7 @@ import {
 import settingsAreaTemplate from './SettingsArea.hbs?raw';
 import './SettingsArea.pcss';
 
-interface SettingsAreaProps {
+interface SettingsAreaProps extends BlockProps {
   avatarSrc?: string;
   iconPhoto: string;
   userName: string;

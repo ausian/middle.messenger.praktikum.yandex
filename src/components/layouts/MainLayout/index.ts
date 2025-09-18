@@ -1,9 +1,9 @@
-import Block from '../../../framework/Block.ts';
+import Block, { type BlockProps } from '../../../framework/Block.ts';
 import MainLayoutTemplate from './MainLayout.hbs?raw';
 import './MainLayout.pcss';
 import { Footer } from '../../organisms/Footer/index.ts';
 
-interface MainLayoutProps {
+interface MainLayoutProps extends BlockProps {
   pageClass: string;
   leftPanel: Block;
   mainArea: Block[];
