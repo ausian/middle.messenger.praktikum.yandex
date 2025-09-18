@@ -27,8 +27,8 @@
     // Style Options
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
 
@@ -41,7 +41,10 @@
     "skipLibCheck": true,
     "noImplicitAny": true,
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true
+
   },
   "include": ["src", "global.d.ts", ".eslintrc.cjs"]
 }

@@ -1,33 +1,8 @@
 <ul class="list {{className}}">
-    {{#each items}}
-    {{#unless (and isEdit isButton)}}
+  {{#each listItems}}
     <li class="list__item">
-        <span class="list__item-name">{{labelList}}</span>
-        {{#if isEdit}}
-        <span class="list__item-input">
-            {{> Input
-            class='input__control--gray'
-            type='text'
-            id=id
-            name=id
-            placeholder=placeholder
-            value=value
-            }}
-        </span>
-        {{else}}
-        {{#if isButton}}
-        <span class="list__item-value">
-            {{> Button
-            type='button'
-            class="button--primary"
-            text=buttonName
-            }}
-        </span>
-        {{else}}
-        <span class="list__item-value">{{value}}</span>
-        {{/if}}
-        {{/if}}
+      <span class="list__item-name">{{label}}</span>
+      {{{ renderBlock block }}}
     </li>
-    {{/unless}}
-    {{/each}}
+  {{/each}}
 </ul>

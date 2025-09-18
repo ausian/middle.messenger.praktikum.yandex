@@ -11,7 +11,7 @@ export { MainLayout } from './layouts/MainLayout/index.ts';
 export { AuthLayout } from './layouts/AuthLayout/index.ts';
 
 export { SettingsPanel } from './organisms/SettingsPanel/index.ts';
-export { MessageList } from './organisms/MessageList/index.ts';
+export { MessageList } from './organisms/ChatList/index.ts';
 export { MessageArea } from './organisms/MessageArea/index.ts';
 export { SettingsArea } from './organisms/SettingsArea/index.ts';
 export { Footer } from './organisms/Footer/index.ts';

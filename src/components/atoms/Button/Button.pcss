@@ -1,6 +1,6 @@
 .button {
-    background-color: var(--bg);
-    border: none;
+    background-color: var(--bg-elem);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
     box-sizing: border-box;
     cursor: pointer;
@@ -10,10 +10,15 @@
     &--primary {
         background-color: var(--accent);
         color: var(--bg-elem);
+
+        & svg path {
+            stroke: var(--bg-elem);
+        }
     }
 
     &--link {
         background-color: transparent;
+        border: none;
         color: var(--accent);
         font-weight: 600;
         padding: 0;

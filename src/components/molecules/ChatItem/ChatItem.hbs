@@ -1,0 +1,19 @@
+<div class="chat-item {{#if active}}chat-item--active{{/if}}">
+  <div class="chat-item__avatar">
+    {{{Avatar}}}
+  </div>
+  <div class="chat-item__content">
+    <div class="chat-item__row chat-item__row--top">
+      <span class="chat-item__author">{{author}}</span>
+      {{#if time}}
+      <time class="chat-item__time">{{time}}</time>
+      {{/if}}
+    </div>
+    <div class="chat-item__row chat-item__row--bottom">
+      <p class="chat-item__preview">{{text}}</p>
+      {{#if unread}}
+      <span class="chat-item__badge">{{unread}}</span>
+      {{/if}}
+    </div>
+  </div>
+</div>

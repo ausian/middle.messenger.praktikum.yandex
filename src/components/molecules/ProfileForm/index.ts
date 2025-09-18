@@ -1,0 +1,128 @@
+import Block from '../../../framework/Block.ts';
+import { Input } from '../../atoms/Input/index.ts';
+import { Button } from '../../atoms/Button/index.ts';
+import profileFormTemplate from './ProfileForm.hbs?raw';
+import getFormDataFromButton from '../../../utils/getFormDataFromButton.ts';
+import './ProfileForm.pcss';
+import FormValidator from '../../../utils/FormValidator.ts';
+
+export interface ProfileFormProps {
+  firstName?: string;
+  secondName?: string;
+  displayName?: string;
+  email?: string;
+  phone?: string;
+  login?: string;
+  onSave?: (event: Event) => void;
+  onChangePassword?: (event: Event) => void;
+}
+
+export class ProfileForm extends Block<ProfileFormProps> {
+  constructor(props: ProfileFormProps = {}) {
+    const {
+      firstName,
+      secondName,
+      displayName,
+      email,
+      phone,
+      login,
+      onSave,
+      onChangePassword,
+    } = props;
+
+    super({
+      ...props,
+      events: {
+        submit: (event: Event) => {
+          if (event.defaultPrevented) return;
+          getFormDataFromButton(event);
+          if (onSave) onSave(event);
+        },
+      },
+      FirstNameInput: new Input({
+        class: 'input__control--gray',
+        name: 'first_name',
+        id: 'first_name',
+        type: 'text',
+        placeholder: 'Введите имя',
+        label: 'Имя',
+        value: firstName,
+      }),
+      SecondNameInput: new Input({
+        class: 'input__control--gray',
+        name: 'second_name',
+        id: 'second_name',
+        type: 'text',
+        placeholder: 'Введите фамилию',
+        label: 'Фамилия',
+        value: secondName,
+      }),
+      DisplayNameInput: new Input({
+        class: 'input__control--gray',
+        name: 'display_name',
+        id: 'display_name',
+        type: 'text',
+        placeholder: 'Введите ник',
+        label: 'Ник',
+        value: displayName,
+      }),
+      EmailInput: new Input({
+        class: 'input__control--gray',
+        name: 'email',
+        id: 'email',
+        type: 'email',
+        placeholder: 'Введите email',
+        label: 'Email',
+        value: email,
+      }),
+      PhoneInput: new Input({
+        class: 'input__control--gray',
+        name: 'phone',
+        id: 'phone',
+        type: 'tel',
+        placeholder: 'Введите телефон',
+        label: 'Телефон',
+        value: phone,
+      }),
+      LoginInput: new Input({
+        class: 'input__control--gray',
+        name: 'login',
+        id: 'login',
+        type: 'text',
+        placeholder: 'Введите логин',
+        label: 'Логин',
+        value: login,
+      }),
+      SaveButton: new Button({
+        class: 'button--primary profile__action-button',
+        id: 'save-profile-button',
+        type: 'submit',
+        text: 'Сохранить',
+      }),
+      ChangePasswordButton: new Button({
+        class: 'button--link profile__action-button',
+        id: 'change-password-button',
+        type: 'button',
+        text: 'Сменить пароль',
+        onClick: (event: Event) => {
+          event.preventDefault();
+          if (onChangePassword) onChangePassword(event);
+        },
+      }),
+    });
+  }
+
+  override componentDidMount(): void {
+    new FormValidator(this, {
+      first_name: this.children.FirstNameInput as Input,
+      second_name: this.children.SecondNameInput as Input,
+      email: this.children.EmailInput as Input,
+      phone: this.children.PhoneInput as Input,
+      login: this.children.LoginInput as Input,
+    });
+  }
+
+  override render() {
+    return profileFormTemplate;
+  }
+}

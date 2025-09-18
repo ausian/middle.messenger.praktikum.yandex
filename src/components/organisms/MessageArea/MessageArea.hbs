@@ -1,4 +1,17 @@
-  <div class="chat-bar">
-    Скоро тут будут сообщения
+<div class="message-area">
+  <div class="message-area__header">
+    <div class="message-area__header-left">
+      <div class="message-area__chat-info">
+        {{{ chatAvatar }}}
+        <h2 class="message-area__chat-name">{{ chatName }}</h2>
+      </div>
+    </div>
+    <div class="message-area__header-right">{{{ chatOptionsButton }}}</div>
   </div>
-  
+  <div class="message-area__messages">
+    {{{ MessageList }}}
+  </div>
+  <div class="message-area__footer">
+    {{{ MessageForm }}}
+  </div>
+</div>

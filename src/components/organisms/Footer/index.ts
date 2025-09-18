@@ -1,3 +1,9 @@
+import Block from '../../../framework/Block.ts';
+import footerTemplate from './Footer.hbs?raw';
 import './Footer.pcss';
 
-export { default as Footer } from './Footer.hbs?raw';
+export class Footer extends Block {
+  override render() {
+    return footerTemplate;
+  }
+}

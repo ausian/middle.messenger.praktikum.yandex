@@ -1,3 +1,28 @@
+import Block from '../../../framework/Block.ts';
+import { Button } from '../../atoms/Button/index.ts';
+import errorBannerTemplate from './ErrorBanner.hbs?raw';
 import './ErrorBanner.pcss';
 
-export { default as ErrorBanner } from './ErrorBanner.hbs?raw';
+interface ErrorBannerProps {
+  code: string;
+  text: string;
+}
+
+export class ErrorBanner extends Block<ErrorBannerProps> {
+  constructor(props: ErrorBannerProps) {
+    super({
+      ...props,
+      ChatButton: new Button({
+        id: 'error-to-chat',
+        type: 'button',
+        class: 'button--primary',
+        text: 'В чат',
+        onClick: () => console.log('Переход в чат'),
+      }),
+    });
+  }
+
+  override render() {
+    return errorBannerTemplate;
+  }
+}

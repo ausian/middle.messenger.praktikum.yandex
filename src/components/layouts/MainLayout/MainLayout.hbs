@@ -1,11 +1,13 @@
 <div class="layout">
   <main class="layout-main {{pageClass}}">
     <div class="layout-main__left-panel">
-      {{{leftPanel}}}
+      {{{ LeftPanel }}}
     </div>
     <div class="layout-main__main-area">
-      {{{mainArea}}}
+      {{#each mainArea}}
+        {{{ renderBlock this }}}
+      {{/each}}
     </div>
   </main>
-  {{> Footer}}
+  {{{ Footer }}}
 </div>

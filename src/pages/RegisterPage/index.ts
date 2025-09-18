@@ -1,3 +1,19 @@
+import Block from '../../framework/Block.ts';
+import { AuthLayoutBlock } from '../../components/layouts/AuthLayout/index.ts';
+import { RegisterForm } from '../../components/molecules/RegisterForm/index.ts';
 import './RegisterPage.pcss';
 
-export { default as RegisterPage } from './RegisterPage.hbs?raw';
+export class RegisterPage extends Block {
+  constructor() {
+    super({
+      AuthLayout: new AuthLayoutBlock({
+        pageClass: 'register-page',
+        children: new RegisterForm(),
+      }),
+    });
+  }
+
+  override render() {
+    return `{{{ AuthLayout }}}`;
+  }
+}
