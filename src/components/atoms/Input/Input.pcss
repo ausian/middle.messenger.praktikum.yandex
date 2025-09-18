@@ -1,0 +1,35 @@
+.input {
+    display: flex;
+    flex-direction: column;
+    gap: .25em;
+
+    &__control {
+        width: 100%;
+        height: 35px;
+        padding: .5em 1.5em;
+        border-radius: var(--radius);
+        box-sizing: border-box;
+        border: none;
+
+        &--gray {
+            background-color: var(--bg);
+        }
+
+        &::placeholder {
+            color: var(--color-hide);
+        }
+        &:focus {
+            outline: none;
+            border: none;
+        }
+    }
+
+    &__label {
+        padding-left: 1.5em;
+    }
+
+    &__error {
+        color: var(--color-error);
+        padding-left: 1.5em;
+    }
+}

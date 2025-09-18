@@ -1,0 +1,30 @@
+.footer {
+    background-color: var(--accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border-top: 1px solid var(--bg-elem);
+
+    &__link {
+        box-sizing: border-box;
+        padding: .25em .5em;
+        background-color: var(--bg-elem);
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: .5em;
+    }
+
+    & nav ul{
+        height: fit-content;
+        display: flex;
+        gap: .75em;
+
+        & li {
+            list-style: none;
+        }
+    }
+}

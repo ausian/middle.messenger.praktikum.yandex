@@ -1,0 +1,78 @@
+<form class="register__form card">
+    <div class="wrapper wrapper--gap-max">
+      <h1 class="login__heading u-text-center">Регистрация</h1>
+      <div class="wrapper wrapper--gap-min">
+        {{> Input
+          class="input__control--gray"
+          name="first_name"
+          id="first_name"
+          type="name"
+          placeholder="Ваше имя*"
+          label="Имя*"
+          error="Поле обязательно для заполнения"
+          autocomplete=true
+        }}
+        {{> Input
+          class="input__control--gray"
+          name="second_name"
+          id="second_name"
+          type="name"
+          placeholder="Ваша фамилия"
+          label="Фамилия"
+        }}
+        {{> Input
+          class="input__control--gray"
+          name="login"
+          id="login"
+          type="text"
+          placeholder="Ваш логин"
+          label="Логин*"
+          error="Логин занят"
+        }}
+        {{> Input
+          class="input__control--gray"
+          name="email"
+          id="email"
+          type="email"
+          placeholder="Ваш Email*"
+          label="Email*"
+          error="Email уже используется"
+          autocomplete=true
+        }}
+        {{> Input
+          class="input__control--gray"
+          name="password"
+          id="password"
+          type="password"
+          placeholder="Ваш пароль*"
+          label="Пароль*"
+          error="Не верный пароль"
+        }}
+        {{> Input
+          class="input__control--gray"
+          name="phone"
+          id="phone"
+          type="phone"
+          placeholder="Ваш телефон"
+          label="Телефон"
+          error="Не верный телефон"
+          autocomplete=true
+        }}
+      </div>
+    </div>
+    <div class="wrapper wrapper--gap-min">
+      {{> Button
+        class="button--primary"
+        id="register-button"
+        type="submit"
+        text="Создать профиль"
+      }}
+      {{> Button
+        class="button--link"
+        id="login-button"
+        type="button"
+        text="Войти"
+      }}
+    </div>
+  </form>
+  
