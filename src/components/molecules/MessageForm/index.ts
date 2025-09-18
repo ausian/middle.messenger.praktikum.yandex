@@ -4,7 +4,6 @@ import { Button } from '../../atoms/Button/index.ts';
 import { Send } from '../../../assets/icons/index.ts';
 import MessageFormTemplate from './MessageForm.hbs?raw';
 import getFormDataFromButton from '../../../utils/getFormDataFromButton.ts';
-import './MessageForm.pcss';
 import FormValidator from '../../../utils/FormValidator.ts';
 
 export class MessageForm extends Block {
