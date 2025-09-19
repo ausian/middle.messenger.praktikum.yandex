@@ -9,29 +9,42 @@ import FormValidator from '../../../utils/FormValidator.ts';
 
 export class LoginForm extends Block {
   constructor() {
+    const loginInput = new Input({
+      class: 'input__control--gray',
+      name: 'login',
+      id: 'login',
+      type: 'text',
+      placeholder: 'Ваш логин',
+      label: 'Логин',
+    });
+
+    const passwordInput = new Input({
+      class: 'input__control--gray',
+      name: 'password',
+      id: 'password',
+      type: 'password',
+      placeholder: 'Ваш пароль',
+      label: 'Пароль',
+    });
+
+    const validator = new FormValidator({
+      login: loginInput,
+      password: passwordInput,
+    });
+
     super({
       events: {
-        submit: (e: Event) => {
-          if (e.defaultPrevented) return;
-          getFormDataFromButton(e);
+        focusout: validator.handleBlur,
+        click: validator.handleClick,
+        submit: (event: Event) => {
+          if (event.defaultPrevented) return;
+          validator.handleSubmit(event);
+          if (event.defaultPrevented) return;
+          getFormDataFromButton(event);
         },
       },
-      LoginInput: new Input({
-        class: 'input__control--gray',
-        name: 'login',
-        id: 'login',
-        type: 'text',
-        placeholder: 'Ваш логин',
-        label: 'Логин',
-      }),
-      PasswordInput: new Input({
-        class: 'input__control--gray',
-        name: 'password',
-        id: 'password',
-        type: 'password',
-        placeholder: 'Ваш пароль',
-        label: 'Пароль',
-      }),
+      LoginInput: loginInput,
+      PasswordInput: passwordInput,
       LoginButton: new Button({
         class: 'button--primary',
         id: 'login-button',
@@ -47,13 +60,6 @@ export class LoginForm extends Block {
           app.navigateTo('register');
         },
       }),
-    });
-  }
-
-  override componentDidMount(): void {
-    new FormValidator(this, {
-      login: this.children.LoginInput as Input,
-      password: this.children.PasswordInput as Input,
     });
   }
 

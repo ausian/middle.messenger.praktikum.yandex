@@ -30,69 +30,94 @@ export class ProfileForm extends Block<ProfileFormProps> {
       onChangePassword,
     } = props;
 
+    const firstNameInput = new Input({
+      class: 'input__control--gray',
+      name: 'first_name',
+      id: 'first_name',
+      type: 'text',
+      placeholder: 'Введите имя',
+      label: 'Имя',
+      value: firstName,
+    });
+
+    const secondNameInput = new Input({
+      class: 'input__control--gray',
+      name: 'second_name',
+      id: 'second_name',
+      type: 'text',
+      placeholder: 'Введите фамилию',
+      label: 'Фамилия',
+      value: secondName,
+    });
+
+    const displayNameInput = new Input({
+      class: 'input__control--gray',
+      name: 'display_name',
+      id: 'display_name',
+      type: 'text',
+      placeholder: 'Введите ник',
+      label: 'Ник',
+      value: displayName,
+    });
+
+    const emailInput = new Input({
+      class: 'input__control--gray',
+      name: 'email',
+      id: 'email',
+      type: 'email',
+      placeholder: 'Введите email',
+      label: 'Email',
+      value: email,
+    });
+
+    const phoneInput = new Input({
+      class: 'input__control--gray',
+      name: 'phone',
+      id: 'phone',
+      type: 'tel',
+      placeholder: 'Введите телефон',
+      label: 'Телефон',
+      value: phone,
+    });
+
+    const loginInput = new Input({
+      class: 'input__control--gray',
+      name: 'login',
+      id: 'login',
+      type: 'text',
+      placeholder: 'Введите логин',
+      label: 'Логин',
+      value: login,
+    });
+
+    const validator = new FormValidator({
+      first_name: firstNameInput,
+      second_name: secondNameInput,
+      email: emailInput,
+      phone: phoneInput,
+      login: loginInput,
+    });
+
     super({
       ...props,
       events: {
+        ...(props.events ?? {}),
+        focusout: validator.handleBlur,
+        click: validator.handleClick,
         submit: (event: Event) => {
+          if (event.defaultPrevented) return;
+          validator.handleSubmit(event);
           if (event.defaultPrevented) return;
           getFormDataFromButton(event);
           if (onSave) onSave(event);
         },
       },
-      FirstNameInput: new Input({
-        class: 'input__control--gray',
-        name: 'first_name',
-        id: 'first_name',
-        type: 'text',
-        placeholder: 'Введите имя',
-        label: 'Имя',
-        value: firstName,
-      }),
-      SecondNameInput: new Input({
-        class: 'input__control--gray',
-        name: 'second_name',
-        id: 'second_name',
-        type: 'text',
-        placeholder: 'Введите фамилию',
-        label: 'Фамилия',
-        value: secondName,
-      }),
-      DisplayNameInput: new Input({
-        class: 'input__control--gray',
-        name: 'display_name',
-        id: 'display_name',
-        type: 'text',
-        placeholder: 'Введите ник',
-        label: 'Ник',
-        value: displayName,
-      }),
-      EmailInput: new Input({
-        class: 'input__control--gray',
-        name: 'email',
-        id: 'email',
-        type: 'email',
-        placeholder: 'Введите email',
-        label: 'Email',
-        value: email,
-      }),
-      PhoneInput: new Input({
-        class: 'input__control--gray',
-        name: 'phone',
-        id: 'phone',
-        type: 'tel',
-        placeholder: 'Введите телефон',
-        label: 'Телефон',
-        value: phone,
-      }),
-      LoginInput: new Input({
-        class: 'input__control--gray',
-        name: 'login',
-        id: 'login',
-        type: 'text',
-        placeholder: 'Введите логин',
-        label: 'Логин',
-        value: login,
-      }),
+      FirstNameInput: firstNameInput,
+      SecondNameInput: secondNameInput,
+      DisplayNameInput: displayNameInput,
+      EmailInput: emailInput,
+      PhoneInput: phoneInput,
+      LoginInput: loginInput,
       SaveButton: new Button({
         class: 'button--primary profile__action-button',
         id: 'save-profile-button',
@@ -109,16 +134,6 @@ export class ProfileForm extends Block<ProfileFormProps> {
           if (onChangePassword) onChangePassword(event);
         },
       }),
-    });
-  }
-
-  override componentDidMount(): void {
-    new FormValidator(this, {
-      first_name: this.children.FirstNameInput as Input,
-      second_name: this.children.SecondNameInput as Input,
-      email: this.children.EmailInput as Input,
-      phone: this.children.PhoneInput as Input,
-      login: this.children.LoginInput as Input,
     });
   }
 

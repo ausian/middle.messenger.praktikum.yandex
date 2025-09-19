@@ -8,32 +8,38 @@ import FormValidator from '../../../utils/FormValidator.ts';
 
 export class MessageForm extends Block {
   constructor() {
+    const messageInput = new Input({
+      class: 'input__control--white',
+      name: 'message',
+      id: 'message',
+      type: 'text',
+      placeholder: 'Начните вводить сообщение',
+    });
+
+    const sendButton = new Button({
+      class: 'button--primary',
+      id: 'send-message',
+      type: 'submit',
+      icon: Send,
+    });
+
+    const validator = new FormValidator({
+      message: messageInput,
+    });
+
     super({
       events: {
-        submit: (e: Event) => {
-          if (e.defaultPrevented) return;
-          getFormDataFromButton(e);
+        focusout: validator.handleBlur,
+        click: validator.handleClick,
+        submit: (event: Event) => {
+          if (event.defaultPrevented) return;
+          validator.handleSubmit(event);
+          if (event.defaultPrevented) return;
+          getFormDataFromButton(event);
         },
       },
-      messageInput: new Input({
-        class: 'input__control--white',
-        name: 'message',
-        id: 'message',
-        type: 'text',
-        placeholder: 'Начните вводить сообщение',
-      }),
-      sendButton: new Button({
-        class: 'button--primary',
-        id: 'send-message',
-        type: 'submit',
-        icon: Send,
-      }),
-    });
-  }
-
-  override componentDidMount(): void {
-    new FormValidator(this, {
-      message: this.children.messageInput as Input,
+      messageInput,
+      sendButton,
     });
   }
 

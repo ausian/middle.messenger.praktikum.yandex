@@ -26,46 +26,54 @@ function getPageFromPath(path: string): PageSlug {
   return slug as PageSlug;
 }
 
-export default class App {
-  private root: HTMLElement;
-
-  private currentPage: Block;
-
-  private currentSlug: PageSlug;
-
+export default class App extends Block {
   constructor() {
-    this.root = document.getElementById('app')!;
-    this.currentSlug = getPageFromPath(window.location.pathname);
-    this.currentPage = new routes[this.currentSlug]();
+    const initialSlug = getPageFromPath(window.location.pathname);
+    const initialPage = new routes[initialSlug]();
 
-    window.addEventListener('popstate', () => {
-      this.navigateTo(getPageFromPath(window.location.pathname), false);
+    let navigate: (slug: PageSlug, push?: boolean) => void = () => undefined;
+
+    const handlePopState = () => {
+      navigate(getPageFromPath(window.location.pathname), false);
+    };
+
+    const handleClick = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      const link = target.closest('a[id$="-link"]');
+      if (!link) return;
+
+      event.preventDefault();
+      const slug = link.id.replace('-link', '') as PageSlug;
+      navigate(slug);
+    };
+
+    super({
+      attr: { class: 'app-root' },
+      events: {
+        'window:popstate': handlePopState,
+        click: handleClick,
+      },
+      CurrentPage: initialPage,
     });
 
-    this.attachLinkListeners();
+    navigate = this.navigateTo.bind(this);
   }
 
-  render() {
-    this.root.replaceChildren(this.currentPage.getContent());
-    this.currentPage.dispatchComponentDidMount();
-  }
-
-  navigateTo(slug: PageSlug, push: boolean = true) {
+  public navigateTo(slug: PageSlug, push: boolean = true): void {
     if (push) window.history.pushState({}, '', `/${slug}`);
-    this.currentSlug = slug;
-    this.currentPage = new routes[slug]();
-    this.render();
+
+    const nextPage = new routes[slug]();
+
+    this.children.CurrentPage = nextPage;
+
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    nextPage.dispatchComponentDidMount();
   }
 
-  attachLinkListeners() {
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (target.matches('a[id$="-link"]')) {
-        e.preventDefault();
-        const slug = target.id.replace('-link', '') as PageSlug;
-        this.navigateTo(slug);
-      }
-    });
+  override render(): string {
+    return '<div>{{{ CurrentPage }}}</div>';
   }
 }
 

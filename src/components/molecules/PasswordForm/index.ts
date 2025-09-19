@@ -13,36 +13,47 @@ export interface PasswordFormProps extends BlockProps {
 
 export class PasswordForm extends Block<PasswordFormProps> {
   constructor(props: PasswordFormProps = {}) {
-    const {
-      onSave,
-      onCancel,
-    } = props;
+    const { onSave, onCancel } = props;
+
+    const oldPasswordInput = new Input({
+      class: 'input__control--gray',
+      name: 'oldPassword',
+      id: 'oldPassword',
+      type: 'password',
+      placeholder: 'Введите старый пароль',
+      label: 'Старый пароль',
+    });
+
+    const newPasswordInput = new Input({
+      class: 'input__control--gray',
+      name: 'newPassword',
+      id: 'newPassword',
+      type: 'password',
+      placeholder: 'Введите новый пароль',
+      label: 'Новый пароль',
+    });
+
+    const validator = new FormValidator({
+      oldPassword: oldPasswordInput,
+      newPassword: newPasswordInput,
+    });
 
     super({
       ...props,
       events: {
+        ...(props.events ?? {}),
+        focusout: validator.handleBlur,
+        click: validator.handleClick,
         submit: (event: Event) => {
+          if (event.defaultPrevented) return;
+          validator.handleSubmit(event);
           if (event.defaultPrevented) return;
           getFormDataFromButton(event);
           if (onSave) onSave(event);
         },
       },
-      OldPasswordInput: new Input({
-        class: 'input__control--gray',
-        name: 'oldPassword',
-        id: 'oldPassword',
-        type: 'password',
-        placeholder: 'Введите старый пароль',
-        label: 'Старый пароль',
-      }),
-      NewPasswordInput: new Input({
-        class: 'input__control--gray',
-        name: 'newPassword',
-        id: 'newPassword',
-        type: 'password',
-        placeholder: 'Введите новый пароль',
-        label: 'Новый пароль',
-      }),
+      OldPasswordInput: oldPasswordInput,
+      NewPasswordInput: newPasswordInput,
       SaveButton: new Button({
         class: 'button--primary profile__action-button',
         id: 'save-password-button',
@@ -56,16 +67,9 @@ export class PasswordForm extends Block<PasswordFormProps> {
         text: 'Отмена',
         onClick: (event: Event) => {
           event.preventDefault();
-           if (onCancel) onCancel(event);
+          if (onCancel) onCancel(event);
         },
       }),
-    });
-  }
-
-  override componentDidMount(): void {
-    new FormValidator(this, {
-      oldPassword: this.children.OldPasswordInput as Input,
-      newPassword: this.children.NewPasswordInput as Input,
     });
   }
 

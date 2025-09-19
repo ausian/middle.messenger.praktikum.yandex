@@ -27,6 +27,12 @@ export default class Block<TProps extends BlockProps = BlockProps> {
 
   protected eventBus: () => EventBus;
 
+  private _registeredEvents: Array<{
+    target: EventTarget;
+    eventName: string;
+    handler: EventListenerOrEventListenerObject;
+  }> = [];
+
   constructor(propsWithChildren: Partial<TProps> = {}) {
     const eventBus = new EventBus();
     const { props, children, lists } =
@@ -120,6 +126,7 @@ export default class Block<TProps extends BlockProps = BlockProps> {
   }
 
   private _render(): void {
+    this._removeEvents();
     const propsAndStubs: Record<string, unknown> = { ...this.props };
 
     Object.entries(this.children).forEach(([key, child]) => {
@@ -141,9 +148,7 @@ export default class Block<TProps extends BlockProps = BlockProps> {
     Object.entries(this.lists).forEach(([, arr]) => {
       arr.forEach((item) => {
         if (item instanceof Block) {
-          const stub = fragment.querySelector(
-            `[data-id="${item._id}"]`,
-          );
+          const stub = fragment.querySelector(`[data-id="${item._id}"]`);
           if (stub) stub.replaceWith(item.getContent());
         }
       });
@@ -168,9 +173,22 @@ export default class Block<TProps extends BlockProps = BlockProps> {
   private _addEvents(): void {
     const { events = {} } = this.props;
 
-    Object.entries(events).forEach(([eventName, handler]) => {
-      this._element?.addEventListener(eventName, handler);
+    Object.entries(events).forEach(([eventKey, handler]) => {
+      const { target, eventName } = this._resolveEventTarget(eventKey);
+
+      if (!target) return;
+
+      target.addEventListener(eventName, handler);
+      this._registeredEvents.push({ target, eventName, handler });
     });
+  }
+
+  private _removeEvents(): void {
+    this._registeredEvents.forEach(({ target, eventName, handler }) => {
+      target.removeEventListener(eventName, handler);
+    });
+
+    this._registeredEvents = [];
   }
 
   protected addAttributes(): void {
@@ -209,7 +227,9 @@ export default class Block<TProps extends BlockProps = BlockProps> {
     });
   }
 
-  private _createFragmentFromTemplate(templateString: string): DocumentFragment {
+  private _createFragmentFromTemplate(
+    templateString: string,
+  ): DocumentFragment {
     const parser = new DOMParser();
     const doc = parser.parseFromString(templateString, 'text/html');
     const fragment = document.createDocumentFragment();
@@ -235,6 +255,24 @@ export default class Block<TProps extends BlockProps = BlockProps> {
 
   public getProps(): Readonly<TProps> {
     return this.props;
+  }
+
+  private _resolveEventTarget(eventKey: string): {
+    target: EventTarget | null;
+    eventName: string;
+  } {
+    if (eventKey.startsWith('window:')) {
+      return { target: window, eventName: eventKey.slice('window:'.length) };
+    }
+
+    if (eventKey.startsWith('document:')) {
+      return {
+        target: document,
+        eventName: eventKey.slice('document:'.length),
+      };
+    }
+
+    return { target: this._element, eventName: eventKey };
   }
 }
 
