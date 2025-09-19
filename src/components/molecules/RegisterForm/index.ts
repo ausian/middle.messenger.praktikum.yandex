@@ -9,61 +9,86 @@ import FormValidator from '../../../utils/FormValidator.ts';
 
 export class RegisterForm extends Block {
   constructor() {
+    const firstNameInput = new Input({
+      class: 'input__control--gray',
+      name: 'first_name',
+      id: 'first_name',
+      type: 'text',
+      placeholder: 'Ваше имя*',
+      label: 'Имя*',
+    });
+
+    const secondNameInput = new Input({
+      class: 'input__control--gray',
+      name: 'second_name',
+      id: 'second_name',
+      type: 'text',
+      placeholder: 'Ваша фамилия',
+      label: 'Фамилия',
+    });
+
+    const loginInput = new Input({
+      class: 'input__control--gray',
+      name: 'login',
+      id: 'login',
+      type: 'text',
+      placeholder: 'Ваш логин',
+      label: 'Логин*',
+    });
+
+    const emailInput = new Input({
+      class: 'input__control--gray',
+      name: 'email',
+      id: 'email',
+      type: 'email',
+      placeholder: 'Ваш Email*',
+      label: 'Email*',
+    });
+
+    const passwordInput = new Input({
+      class: 'input__control--gray',
+      name: 'password',
+      id: 'password',
+      type: 'password',
+      placeholder: 'Ваш пароль*',
+      label: 'Пароль*',
+    });
+
+    const phoneInput = new Input({
+      class: 'input__control--gray',
+      name: 'phone',
+      id: 'phone',
+      type: 'tel',
+      placeholder: 'Ваш телефон',
+      label: 'Телефон',
+    });
+
+    const validator = new FormValidator({
+      first_name: firstNameInput,
+      second_name: secondNameInput,
+      login: loginInput,
+      email: emailInput,
+      password: passwordInput,
+      phone: phoneInput,
+    });
+
     super({
       events: {
+        focusout: validator.handleBlur,
+        click: validator.handleClick,
         submit: (event: Event) => {
+          if (event.defaultPrevented) return;
+          validator.handleSubmit(event);
           if (event.defaultPrevented) return;
           getFormDataFromButton(event);
         },
       },
-      FirstNameInput: new Input({
-        class: 'input__control--gray',
-        name: 'first_name',
-        id: 'first_name',
-        type: 'text',
-        placeholder: 'Ваше имя*',
-        label: 'Имя*',
-      }),
-      SecondNameInput: new Input({
-        class: 'input__control--gray',
-        name: 'second_name',
-        id: 'second_name',
-        type: 'text',
-        placeholder: 'Ваша фамилия',
-        label: 'Фамилия',
-      }),
-      LoginInput: new Input({
-        class: 'input__control--gray',
-        name: 'login',
-        id: 'login',
-        type: 'text',
-        placeholder: 'Ваш логин',
-        label: 'Логин*',
-      }),
-      EmailInput: new Input({
-        class: 'input__control--gray',
-        name: 'email',
-        id: 'email',
-        type: 'email',
-        placeholder: 'Ваш Email*',
-        label: 'Email*',
-      }),
-      PasswordInput: new Input({
-        class: 'input__control--gray',
-        name: 'password',
-        id: 'password',
-        type: 'password',
-        placeholder: 'Ваш пароль*',
-        label: 'Пароль*',
-      }),
-      PhoneInput: new Input({
-        class: 'input__control--gray',
-        name: 'phone',
-        id: 'phone',
-        type: 'tel',
-        placeholder: 'Ваш телефон',
-        label: 'Телефон',
-      }),
+      FirstNameInput: firstNameInput,
+      SecondNameInput: secondNameInput,
+      LoginInput: loginInput,
+      EmailInput: emailInput,
+      PasswordInput: passwordInput,
+      PhoneInput: phoneInput,
       RegisterButton: new Button({
         class: 'button--primary',
         id: 'register-button',
@@ -75,19 +100,10 @@ export class RegisterForm extends Block {
         id: 'login-button',
         type: 'button',
         text: 'Войти',
-        onClick: () => { app.navigateTo('login'); },
+        onClick: () => {
+          app.navigateTo('login');
+        },
       }),
-    });
-  }
-
-  override componentDidMount(): void {
-    new FormValidator(this, {
-      first_name: this.children.FirstNameInput as Input,
-      second_name: this.children.SecondNameInput as Input,
-      login: this.children.LoginInput as Input,
-      email: this.children.EmailInput as Input,
-      password: this.children.PasswordInput as Input,
-      phone: this.children.PhoneInput as Input,
     });
   }
 
