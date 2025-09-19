@@ -1,0 +1,74 @@
+.chat-item {
+  align-items: center;
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  display: flex;
+  gap: .75em;
+  padding: .5em;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--bg-elem);
+  }
+
+  &--active {
+    background-color: var(--bg-elem);
+  }
+
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.25em;
+    min-width: 0;
+  }
+
+  &__row {
+    align-items: baseline;
+    display: flex;
+  }
+
+  &__row--top {
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__row--bottom {
+    align-items: flex-end;
+    gap: 0.5em;
+    justify-content: space-between;
+  }
+
+  &__author {
+    color: var(--color);
+    font-weight: 600;
+  }
+
+  &__time {
+    color: var(--color-hide);
+    font-size: 0.75em;
+  }
+
+  &__preview {
+    color: var(--color-hide);
+    flex: 1;
+    font-size: 0.875em;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__badge {
+    background-color: var(--accent);
+    border-radius: 1em;
+    color: var(--bg);
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    min-width: 1.25em;
+    padding: 0.25em 0.5em;
+    text-align: center;
+  }
+}

@@ -1,11 +1,7 @@
 <div class="error-banner wrapper--gap-max">
-    <div class="error-banner__message  wrapper--gap-min">
-        <h1 class="error-banner__code">{{code}}</h1>
-        <span class="error-banner__text">{{text}}</span>
-    </div>
-    {{> Button
-    type='button'
-    class="button--primary"
-    text='В чат'
-    }}
+  <div class="error-banner__message wrapper--gap-min">
+    <h1 class="error-banner__code">{{code}}</h1>
+    <span class="error-banner__text">{{text}}</span>
+  </div>
+  {{{ ChatButton }}}
 </div>

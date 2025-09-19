@@ -1,6 +1,0 @@
-export { ChatPage } from './ChatPage'
-export { LoginPage } from './LoginPage'
-export { RegisterPage } from './RegisterPage'
-export { SettingsPage } from './SettingsPage'
-export { Page404 } from './Page404'
-export { Page500 } from './Page500'

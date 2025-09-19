@@ -1,4 +1,12 @@
-  <div class="messages-bar">
-    Скоро тут будут чаты
-  </div>
-  
+<ul class="message-list">
+  {{#each items}}
+    <li class="message-list__item">
+      {{{ renderBlock this }}}
+    </li>
+  {{/each}}
+  {{#unless items}}
+    <li class="message-list__item">
+      <div class="message-list__empty">Нет сообщений</div>
+    </li>
+  {{/unless}}
+</ul>

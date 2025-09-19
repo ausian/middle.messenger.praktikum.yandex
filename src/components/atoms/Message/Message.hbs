@@ -1,0 +1,14 @@
+<div class="message {{#if outgoing}}message--outgoing{{/if}}">
+  {{#if avatar}}
+    <img class="message__avatar" src="{{avatar}}" alt="{{author}} avatar" />
+  {{/if}}
+  <div class="message__bubble">
+    {{#if author}}
+      <div class="message__author">{{author}}</div>
+    {{/if}}
+    <div class="message__text">{{text}}</div>
+    {{#if time}}
+      <time class="message__time">{{time}}</time>
+    {{/if}}
+  </div>
+</div>

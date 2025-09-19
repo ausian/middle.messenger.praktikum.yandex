@@ -1,10 +1,30 @@
-.messages-bar {
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.message-list {
+  background-color: var(--bg-elem);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: .25em;
+  height: calc(100vh - 67px - 60px - 84px);
+  list-style: none;
+  margin: 0;
+  overflow-y: scroll;
+  padding: .5em;
+
+  &__item {
+    display: block;
+  }
+
+  &__date-badge {
     color: var(--color-hide);
+    font-size: .75em;
+    line-height: 1;
+    padding: .25em .75em;
+    text-align: center;
+  }
+
+  &__empty {
+    color: var(--color-hide);
+    padding: .5em 0;
+    text-align: center;
+  }
 }

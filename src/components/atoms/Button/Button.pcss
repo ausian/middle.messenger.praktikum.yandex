@@ -1,29 +1,34 @@
 .button {
-    padding: 0.5em 1.5em;
-    font-size: 1em;
+    background-color: var(--bg-elem);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    border: none;
-    cursor: pointer;
     box-sizing: border-box;
-    background-color: var(--bg);
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0.5em 1.5em;
 
     &--primary {
         background-color: var(--accent);
         color: var(--bg-elem);
+
+        & svg path {
+            stroke: var(--bg-elem);
+        }
     }
 
     &--link {
         background-color: transparent;
+        border: none;
         color: var(--accent);
         font-weight: 600;
         padding: 0;
     }
 
     &--icon {
-        padding: .5em;
-        display: flex;
         align-items: center;
+        display: flex;
         justify-content: center;
+        padding: .5em;
     }
 }
 

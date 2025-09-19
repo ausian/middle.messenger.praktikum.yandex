@@ -1,25 +1,26 @@
 .list {
-    padding: 0;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: .5em;
+    padding: 0;
     width: 100%;
-    box-sizing: border-box;
 
     &__item {
-        box-sizing: border-box;
-        padding: .75em 0;
-        display: flex;
-        justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid var(--bg);
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        padding: .75em 0;
     }
 
     &__item-name {
         font-weight: 600;
     }
+
     &__item-input {
-        width: 100%;
         max-width: 250px;
+        width: 100%;
     }
 }
