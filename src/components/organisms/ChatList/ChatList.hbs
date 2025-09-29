@@ -1,0 +1,10 @@
+<ul class="chat-list">
+  <div class="chat-list__search">
+    {{{ searchInput }}}
+  </div>
+  {{#each chats}}
+    <li class="chat-list__item">
+      {{{ renderBlock this }}}
+    </li>
+  {{/each}}
+</ul>

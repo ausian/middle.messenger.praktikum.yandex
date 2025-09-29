@@ -1,7 +1,7 @@
 <div class="input">
     <label for="{{name}}" class="input__label label">{{label}}</label>
     <input
-        class="input__control {{class}}"
+        class="input__control {{class}} {{#if error}}input__control--error{{/if}}"
         type="{{type}}"
         id="{{id}}"
         name="{{name}}"
@@ -9,9 +9,10 @@
         {{#if value }}
             value="{{value}}"
         {{/if}}
-        {{#if autocomplete}}
-            autocomplete="on"
-        {{/if}}
     />
-    <span class="input__error label">{{error}}</span>
+    {{#if error}}
+        {{#unless hideError}}
+            <span class="input__error label">{{error}}</span>
+        {{/unless}}
+    {{/if}}
 </div>

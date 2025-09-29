@@ -3,24 +3,44 @@
   "private": true,
   "version": "0.0.0",
   "engines": {
-  "node": ">=20.19"
+    "node": ">=20.19"
+  },
+  "targets": {
+    "default": {
+      "includeNodeModules": true
+    }
   },
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "start": "vite build && node server.cjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "tsc --noEmit && eslint . --ext .ts,.js,.cjs,.mjs",
+    "lint:fix": "tsc --noEmit && eslint . --ext .ts,.js,.cjs,.mjs --fix",
+    "lint:css": "stylelint \"src/**/*.{css,pcss,scss}\"",
+    "lint:fix:css": "stylelint \"src/**/*.{css,pcss,scss}\" --fix"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.5.6",
     "postcss-nested": "^7.0.2",
     "postcss-preset-env": "^10.2.4",
+    "prettier": "^3.6.2",
+    "stylelint": "^16.9.0",
+    "stylelint-config-standard": "^36.0.1",
+    "stylelint-order": "^6.0.4",
+    "typescript": "^5.5.4",
     "vite": "^7.1.2"
   },
   "dependencies": {
     "express": "^5.1.0",
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "postcss-reporter": "^7.1.0"
   }
 }
