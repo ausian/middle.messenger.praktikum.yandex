@@ -1,7 +1,6 @@
 import Block, { type BlockProps } from '../../../framework/Block.ts';
 import MainLayoutTemplate from './MainLayout.hbs?raw';
 import './MainLayout.pcss';
-import { Footer } from '../../organisms/Footer/index.ts';
 
 interface MainLayoutProps extends BlockProps {
   pageClass: string;
@@ -17,7 +16,6 @@ export class MainLayout extends Block<Omit<MainLayoutProps, 'mainArea'>> {
     super({
       pageClass,
       LeftPanel: leftPanel,
-      Footer: props.Footer ?? new Footer(),
     });
 
     this.setLists({

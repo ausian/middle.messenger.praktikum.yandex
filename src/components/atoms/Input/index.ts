@@ -13,6 +13,7 @@ interface InputProps extends BlockProps {
   value?: string | undefined;
   class?: string | undefined;
   hideError?: boolean | undefined;
+  disabled?: boolean | undefined;
 }
 
 export class Input extends Block<InputProps> {

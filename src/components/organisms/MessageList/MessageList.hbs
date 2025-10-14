@@ -1,12 +1,17 @@
 <ul class="message-list">
-  {{#each items}}
+  {{#if isLoading}}
     <li class="message-list__item">
-      {{{ renderBlock this }}}
+      <div class="message-list__empty">Загрузка сообщений...</div>
     </li>
-  {{/each}}
-  {{#unless items}}
+  {{else if hasItems}}
+    {{#each items}}
+      <li class="message-list__item">
+        {{{ renderBlock this }}}
+      </li>
+    {{/each}}
+  {{else}}
     <li class="message-list__item">
       <div class="message-list__empty">Нет сообщений</div>
     </li>
-  {{/unless}}
+  {{/if}}
 </ul>

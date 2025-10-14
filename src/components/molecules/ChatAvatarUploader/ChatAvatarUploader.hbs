@@ -1,0 +1,21 @@
+<label class="chat-avatar-uploader {{#if disabled}}chat-avatar-uploader--disabled{{/if}}">
+  <span class="chat-avatar-uploader__avatar">
+    {{{ Avatar }}}
+  </span>
+  <input
+    class="chat-avatar-uploader__input"
+    type="file"
+    name="chat-avatar"
+    accept="image/*"
+    {{#if disabled}}disabled{{/if}}
+  />
+  <span class="chat-avatar-uploader__overlay">
+    {{#if icon}}
+      <span class="chat-avatar-uploader__overlay-icon">
+        {{{ icon }}}
+      </span>
+    {{else if hint}}
+      {{ hint }}
+    {{/if}}
+  </span>
+</label>

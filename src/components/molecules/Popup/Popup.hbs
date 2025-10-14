@@ -1,0 +1,19 @@
+<div class="popup popup--{{type}} {{#if isVisible}}popup--visible{{/if}}" aria-hidden="{{#if isVisible}}false{{else}}true{{/if}}">
+  <div class="popup__overlay" data-popup-action="overlay"></div>
+  <div class="popup__container" role="alertdialog" aria-modal="true">
+    <button class="popup__close" type="button" data-popup-action="close" aria-label="Закрыть уведомление"></button>
+    {{#if title}}
+      <h2 class="popup__title">{{title}}</h2>
+    {{/if}}
+    {{#if message}}
+      <div class="popup__message">{{message}}</div>
+    {{/if}}
+    {{#if hasContent}}
+      <div class="popup__content">
+        {{#each content}}
+          {{{ renderBlock this }}}
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
+</div>

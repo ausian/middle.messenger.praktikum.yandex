@@ -1,0 +1,13 @@
+<form class="popup-form" novalidate>
+  <p class="popup-form__description">{{description}}</p>
+  <div class="popup-form__field">
+    {{{ NicknameInput }}}
+  </div>
+  {{#if errorMessage}}
+    <p class="popup-form__error" role="alert">{{errorMessage}}</p>
+  {{/if}}
+  <div class="popup-form__actions">
+    {{{ CancelButton }}}
+    {{{ SubmitButton }}}
+  </div>
+</form>
