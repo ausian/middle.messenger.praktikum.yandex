@@ -17,21 +17,23 @@ export default class EventBus {
   }
 
   public off(event: string, callback: EventCallback): void {
-    if (!this.listeners[event]) {
-      throw new Error(`No event: ${event}`);
-    }
+    const listeners = this.listeners[event];
+    if (!listeners || listeners.length === 0) return;
 
-    this.listeners[event] = this.listeners[event].filter(
+    this.listeners[event] = listeners.filter(
       (listener) => listener !== callback,
     );
+
+    if (this.listeners[event]?.length === 0) {
+      delete this.listeners[event];
+    }
   }
 
   public emit(event: string, ...args: EventArgs[]): void {
-    if (!this.listeners[event]) {
-      throw new Error(`No event: ${event}`);
-    }
+    const listeners = this.listeners[event];
+    if (!listeners || listeners.length === 0) return;
 
-    this.listeners[event].forEach((listener) => {
+    listeners.forEach((listener) => {
       listener(...args);
     });
   }

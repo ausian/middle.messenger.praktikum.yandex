@@ -14,7 +14,7 @@ import {
 import settingsAreaTemplate from './SettingsArea.hbs?raw';
 import './SettingsArea.pcss';
 
-interface SettingsAreaProps extends BlockProps {
+export interface SettingsAreaProps extends BlockProps {
   avatarSrc?: string;
   iconPhoto: string;
   userName: string;
@@ -51,19 +51,35 @@ export class SettingsArea extends Block<SettingsAreaInternalProps> {
     let toggleToPasswordForm = () => {};
     let toggleToProfileForm = () => {};
 
+    const profileProps: ProfileFormProps = profile ?? {};
+
     const profileForm = new ProfileForm({
-      ...profile,
+      ...profileProps,
       onChangePassword: (event: Event) => {
         toggleToPasswordForm();
-        if (profile?.onChangePassword) profile.onChangePassword(event);
+        if (profileProps.onChangePassword) profileProps.onChangePassword(event);
       },
     });
 
+    const passwordProps: PasswordFormProps = password ?? {};
+
     const passwordForm = new PasswordForm({
-      ...password,
+      ...passwordProps,
+      onSave: (event: Event) => {
+        const result = passwordProps.onSave?.(event);
+        if (result && typeof (result as Promise<unknown>).then === 'function') {
+          void (result as Promise<unknown>)
+            .then(() => {
+              toggleToProfileForm();
+            })
+            .catch(() => {});
+        } else {
+          toggleToProfileForm();
+        }
+      },
       onCancel: (event: Event) => {
         toggleToProfileForm();
-        if (password?.onCancel) password.onCancel(event);
+        if (passwordProps.onCancel) passwordProps.onCancel(event);
       },
     });
 

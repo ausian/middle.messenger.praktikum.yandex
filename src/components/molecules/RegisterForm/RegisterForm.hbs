@@ -9,6 +9,9 @@
       {{{ PasswordInput }}}
       {{{ PhoneInput }}}
     </div>
+    {{#if authError}}
+      <p class="register__form-error">{{authError}}</p>
+    {{/if}}
   </div>
   <div class="wrapper wrapper--gap-min">
     {{{ RegisterButton }}}

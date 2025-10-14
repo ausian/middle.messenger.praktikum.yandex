@@ -1,0 +1,39 @@
+<div class="popup-remove">
+  <p class="popup-remove__description">{{description}}</p>
+  {{#if hasUsers}}
+    <ul class="popup-remove__list">
+      {{#each mappedUsers}}
+        <li class="popup-remove__item">
+          <button
+            type="button"
+            class="popup-remove__user-button"
+            data-user-id="{{id}}"
+            {{#if ../../isProcessing}}disabled{{/if}}
+          >
+            <span class="popup-remove__user">
+              <span class="popup-remove__avatar">
+                {{#if avatarSrc}}
+                  <img src="{{avatarSrc}}" alt="Аватар {{name}}" />
+                {{else}}
+                  <span class="popup-remove__initial">{{#if initial}}{{initial}}{{else}}?{{/if}}</span>
+                {{/if}}
+              </span>
+              <span class="popup-remove__name">{{name}}</span>
+            </span>
+            {{#if roleLabel}}
+              <span class="popup-remove__role">{{roleLabel}}</span>
+            {{/if}}
+          </button>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="popup-remove__empty">В чате нет других пользователей, которых можно удалить.</p>
+  {{/if}}
+  {{#if errorMessage}}
+    <p class="popup-form__error" role="alert">{{errorMessage}}</p>
+  {{/if}}
+  <div class="popup-remove__footer">
+    {{{ CancelButton }}}
+  </div>
+</div>

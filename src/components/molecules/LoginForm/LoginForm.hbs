@@ -5,6 +5,9 @@
       {{{ LoginInput }}}
       {{{ PasswordInput }}}
     </div>
+    {{#if authError}}
+      <p class="login__form-error">{{authError}}</p>
+    {{/if}}
   </div>
   <div class="wrapper wrapper--gap-min">
     {{{ LoginButton }}}

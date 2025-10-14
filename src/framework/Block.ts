@@ -1,6 +1,7 @@
 import EventBus from './EventBus.ts';
 import type { EventCallback } from './EventBus.ts';
 import Handlebars from 'handlebars';
+import isEqual from '../utils/isEqual.ts';
 
 export interface BlockProps extends Record<string, unknown> {
   attr?: Record<string, unknown>;
@@ -106,7 +107,12 @@ export default class Block<TProps extends BlockProps = BlockProps> {
       if (value instanceof Block) {
         children[key] = value;
       } else if (Array.isArray(value)) {
-        lists[key] = value;
+        const containsBlock = value.some((item) => item instanceof Block);
+        if (containsBlock) {
+          lists[key] = value;
+        } else {
+          props[key] = value;
+        }
       } else {
         props[key] = value;
       }
@@ -128,6 +134,9 @@ export default class Block<TProps extends BlockProps = BlockProps> {
   private _render(): void {
     this._removeEvents();
     const propsAndStubs: Record<string, unknown> = { ...this.props };
+
+    const currentElement = this._element;
+    const currentParent = currentElement?.parentNode ?? null;
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
@@ -154,9 +163,27 @@ export default class Block<TProps extends BlockProps = BlockProps> {
       });
     });
 
-    const newElement = fragment.firstElementChild as HTMLElement;
-    if (this._element && newElement) this._element.replaceWith(newElement);
-    this._element = newElement;
+    const newElement = fragment.firstElementChild as HTMLElement | null;
+
+    if (!newElement) {
+      this._element = null;
+      return;
+    }
+
+    if (!currentElement) {
+      this._element = newElement;
+    } else if (currentParent instanceof Node) {
+      if (currentElement.parentNode instanceof Node) {
+        currentElement.replaceWith(newElement);
+      } else {
+        currentParent.replaceChildren(newElement);
+      }
+      this._element = newElement;
+    } else {
+      currentElement.replaceWith(newElement);
+      this._element = newElement;
+    }
+
     this._addEvents();
     this.addAttributes();
   }
@@ -216,6 +243,10 @@ export default class Block<TProps extends BlockProps = BlockProps> {
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set: (target, prop: string, value: unknown) => {
+        const currentValue = target[prop as keyof T];
+        if (isEqual(currentValue, value)) {
+          return true;
+        }
         const oldTarget = { ...target };
         target[prop as keyof T] = value as T[keyof T];
         this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);

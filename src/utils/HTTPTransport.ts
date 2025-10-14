@@ -12,6 +12,19 @@ const APPLICATION_JSON = 'application/json';
 const TEXT_PLAIN_UTF8 = 'text/plain;charset=UTF-8';
 const NETWORK_ERROR_MESSAGE = 'Network error';
 
+export class HTTPError extends Error {
+  public readonly status: number;
+
+  public readonly response: unknown;
+
+  constructor(status: number, message: string, response: unknown) {
+    super(message);
+    this.name = 'HTTPError';
+    this.status = status;
+    this.response = response;
+  }
+}
+
 class HttpClient {
   private baseUrl: string;
 
@@ -36,7 +49,13 @@ class HttpClient {
   }
 
   private buildUrl(url: string, query?: QueryParams): string {
-    const endpoint = this.baseUrl + url;
+    const trimmedBase = this.baseUrl.endsWith('/')
+      ? this.baseUrl.slice(0, -1)
+      : this.baseUrl;
+    const path = url
+      ? (url.startsWith('/') ? url : `/${url}`)
+      : '';
+    const endpoint = `${trimmedBase}${path}`;
     if (!query) return endpoint;
     const parts: string[] = [];
     for (const [key, value] of Object.entries(query)) {
@@ -57,6 +76,7 @@ class HttpClient {
     return new Promise<T>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
+      xhr.withCredentials = true;
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 400) {
@@ -71,7 +91,31 @@ class HttpClient {
             resolve(xhr.responseText as unknown as T);
           }
         } else {
-          reject(new Error(`HTTP ${xhr.status}`));
+          const rawResponse = xhr.responseText;
+          let parsedResponse: unknown = rawResponse;
+          let message = `HTTP ${xhr.status}`;
+
+          if (rawResponse) {
+            try {
+              parsedResponse = JSON.parse(rawResponse);
+              if (
+                typeof parsedResponse === 'object'
+                && parsedResponse !== null
+                && 'reason' in parsedResponse
+                && typeof (parsedResponse as { reason: unknown }).reason === 'string'
+              ) {
+                message = (parsedResponse as { reason: string }).reason;
+              } else if (typeof rawResponse === 'string') {
+                message = rawResponse;
+              }
+            } catch {
+              if (typeof rawResponse === 'string') {
+                message = rawResponse;
+              }
+            }
+          }
+
+          reject(new HTTPError(xhr.status, message, parsedResponse));
         }
       };
 

@@ -2,6 +2,7 @@
     class="button{{#if icon}} button--icon{{/if}}{{#if active}} button--active{{/if}}{{#if class}} {{class}}{{/if}}"
     id="{{id}}"
     type="{{type}}"
+    {{#if disabled}}disabled{{/if}}
     {{#if onclick}}onclick="{{onclick}}"{{/if}}
 >
     {{#if icon}}
