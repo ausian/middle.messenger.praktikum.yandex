@@ -1,11 +1,19 @@
 import './styles/main.pcss';
-import { app } from './App.ts';
+import { startApp } from './App.ts';
+import authController from './controllers/AuthController.ts';
 
-const root = document.getElementById('app');
+const init = () => {
+  if (!document.getElementById('app')) {
+    throw new Error('Root element with id "app" not found');
+  }
 
-if (!root) {
-  throw new Error('Root element with id "app" not found');
+  void authController.fetchCurrentUser().finally(() => {
+    startApp();
+  });
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
 }
-
-root.replaceChildren(app.getContent());
-app.dispatchComponentDidMount();

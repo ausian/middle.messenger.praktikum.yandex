@@ -12,4 +12,13 @@ export default defineConfig({
     css: {
         postcss: './postcss.config.js',
     },
+    server: {
+        proxy: {
+            '/api': {
+                target: 'https://ya-praktikum.tech',
+                changeOrigin: true,
+                secure: true,
+            },
+        },
+    },
 });

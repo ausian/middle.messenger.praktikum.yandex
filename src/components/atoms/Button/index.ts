@@ -10,6 +10,7 @@ interface ButtonProps extends BlockProps {
   icon?: string;
   active?: boolean;
   onClick?: (e: Event) => void | ((e: MouseEvent) => void);
+  disabled?: boolean | undefined;
 }
 
 export class Button extends Block<ButtonProps> {

@@ -1,6 +1,6 @@
-const getFormDataFromButton = (
-  event: Event,
-): Record<string, FormDataEntryValue> | void => {
+export type FormDataValues = Partial<Record<string, string>>;
+
+const getFormDataFromButton = (event: Event): FormDataValues | null => {
   event.preventDefault();
 
   const currentTarget = event.currentTarget as
@@ -14,16 +14,15 @@ const getFormDataFromButton = (
       ? currentTarget
       : currentTarget?.form ?? null;
 
-  if (!formElement) return;
+  if (!formElement) return null;
 
   const formData = new FormData(formElement);
-  const data: Record<string, FormDataEntryValue> = {};
+  const data: FormDataValues = {};
 
   formData.forEach((value, key) => {
-    data[key] = value;
+    data[key] = typeof value === 'string' ? value : String(value);
   });
 
-  console.log(data);
   return data;
 };
 

@@ -1,6 +1,5 @@
 import Block, { type BlockProps } from '../../../framework/Block.ts';
 import AuthLayout from './AuthLayout.hbs?raw';
-import { Footer } from '../../organisms/Footer/index.ts';
 import './AuthLayout.pcss';
 
 interface AuthLayoutProps extends BlockProps {
@@ -13,7 +12,6 @@ export class AuthLayoutBlock extends Block<AuthLayoutProps> {
   constructor(props: AuthLayoutProps) {
     super({
       ...props,
-      Footer: new Footer(),
     });
   }
 

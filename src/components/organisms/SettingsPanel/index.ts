@@ -1,8 +1,12 @@
 import Block, { type BlockProps } from '../../../framework/Block.ts';
 import { Button } from '../../atoms/Button/index.ts';
 import settingsPanelTemplate from './SettingsPanel.hbs?raw';
-import { app } from '../../../App.ts';
+import { router, APP_ROUTES } from '../../../App.ts';
 import './SettingsPanel.pcss';
+import authController from '../../../controllers/AuthController.ts';
+import chatController from '../../../controllers/ChatController.ts';
+import { hidePopup, showPopup } from '../../../utils/popupService.ts';
+import { CreateChatPopupContent } from '../../molecules/Popup/content/index.ts';
 
 interface SettingsPanelProps extends BlockProps {
   state: 'chat' | 'settings';
@@ -25,6 +29,33 @@ export class SettingsPanel extends Block<SettingsPanelProps> {
         type: 'button',
         icon: props.icons.chatAdd,
         text: '',
+        onClick: () => {
+          const popupContent = new CreateChatPopupContent({
+            onSubmit: async (title) => {
+              try {
+                await chatController.createChat(title);
+                hidePopup();
+                showPopup({
+                  title: 'Готово',
+                  message: `Чат "${title}" создан`,
+                  type: 'success',
+                  duration: 3000,
+                });
+              } catch (error) {
+                console.error('Failed to create chat', error);
+                throw error;
+              }
+            },
+            onCancel: () => {
+              hidePopup();
+            },
+          });
+
+          showPopup({
+            title: 'Новый чат',
+            content: popupContent,
+          });
+        },
       }),
 
       BackButton: new Button({
@@ -33,7 +64,7 @@ export class SettingsPanel extends Block<SettingsPanelProps> {
         type: 'button',
         icon: props.icons.arrowBack,
         onClick: () => {
-          window.history.back();
+          router.back();
         },
       }),
 
@@ -43,7 +74,14 @@ export class SettingsPanel extends Block<SettingsPanelProps> {
         type: 'button',
         icon: props.icons.logout,
         onClick: () => {
-          app.navigateTo('login');
+          void (async () => {
+            try {
+              await authController.logout();
+            } catch (error) {
+              console.error('Logout failed', error);
+            }
+            router.go(APP_ROUTES.login);
+          })();
         },
       }),
 
@@ -53,7 +91,7 @@ export class SettingsPanel extends Block<SettingsPanelProps> {
         type: 'button',
         icon: props.icons.settings,
         onClick: () => {
-          app.navigateTo('settings');
+          router.go(APP_ROUTES.settings);
         },
       }),
     });

@@ -2,9 +2,17 @@
   <div class="chat-list__search">
     {{{ searchInput }}}
   </div>
-  {{#each chats}}
-    <li class="chat-list__item">
-      {{{ renderBlock this }}}
-    </li>
-  {{/each}}
+  {{#if isLoading}}
+    <li class="chat-list__state">Загрузка...</li>
+  {{else if error}}
+    <li class="chat-list__state chat-list__state--error">{{ error }}</li>
+  {{else if hasChats}}
+    {{#each chats}}
+      <li class="chat-list__item">
+        {{{ renderBlock this }}}
+      </li>
+    {{/each}}
+  {{else}}
+    <li class="chat-list__state">Нет чатов</li>
+  {{/if}}
 </ul>
