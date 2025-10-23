@@ -1,7 +1,7 @@
 import Block from './Block.ts';
 
 export type BlockConstructable<TBlock extends Block = Block> = new (
-  ...args: unknown[]
+  ...args: any[]
 ) => TBlock;
 
 interface RouteProps {

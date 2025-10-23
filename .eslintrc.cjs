@@ -39,24 +39,40 @@ module.exports = {
     },
 
     {
-      files: ['*.js', '*.cjs', '*.mjs'],
+      files: ['*.js', '*.mjs'],
       parser: 'espree',
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+      },
       extends: ['eslint:recommended', 'prettier'],
       rules: {
         'eol-last': ['error', 'always'],
       },
     },
     {
-    files: ['vite.config.js'],
-    parser: 'espree',
-    parserOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module', 
+      files: ['*.cjs'],
+      parser: 'espree',
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'script',
+      },
+      extends: ['eslint:recommended', 'prettier'],
+      rules: {
+        'eol-last': ['error', 'always'],
+      },
     },
-    extends: ['eslint:recommended', 'prettier'],
-    rules: {
-      'eol-last': ['error', 'always'],
+    {
+      files: ['vite.config.js'],
+      parser: 'espree',
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+      },
+      extends: ['eslint:recommended', 'prettier'],
+      rules: {
+        'eol-last': ['error', 'always'],
+      },
     },
-  },
   ],
 };

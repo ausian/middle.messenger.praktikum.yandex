@@ -69,6 +69,7 @@ Vite автоматически применит проксирование `/ap
 | `npm run build` | Сборка production-версии в `dist/`. |
 | `npm run preview` | Локальный предпросмотр собранного бандла. |
 | `npm run start` | Сборка и запуск Express-сервера (`server.cjs`) для production-режима. |
+| `npm run test` | Юнит-тесты Mocha в окружении jsdom. |
 | `npm run lint` | Проверка TypeScript/JavaScript-части ESLint. |
 | `npm run lint:fix` | ESLint с автоматическим исправлением. |
 | `npm run lint:css` | Проверка стилей Stylelint. |
@@ -104,6 +105,13 @@ Vite автоматически применит проксирование `/ap
 - ESLint настроен на базу Airbnb для TypeScript и Prettier-совместимость.
 - Stylelint проверяет CSS/PCSS-файлы и поддерживает автоисправления.
 - Перед созданием pull request рекомендуется запускать `npm run lint` и `npm run lint:css`.
+- Husky + lint-staged автоматически выполняют ESLint и Stylelint для изменённых файлов перед коммитом.
+
+## Тестирование
+- Юнит-тесты запускаются командой `npm run test` и выполняются Mocha + Chai + Sinon в окружении jsdom, что позволяет тестировать компоненты без браузера.
+- Конфигурация `.mocharc.json` охватывает все `*.test.ts` в `src/`, а за трансформацию TypeScript отвечает `ts-node/esm`.
+- Файл `mochaSetup.js` регистрирует нагрузчики для `.hbs`/`.pcss`, настраивает jsdom и открывает возможность импортировать шаблоны с суффиксом `?raw`.
+- Для диагностики отдельных тестов можно передавать маску: `npm run test -- "src/framework/*.test.ts"`.
 
 ## Полезные ссылки
 - Макет в Figma: https://www.figma.com/design/oXZLhwgYixawcvG0LrUDih/y.messenger?node-id=3-2&t=WPmItYt5t8Xwdq8l-1
