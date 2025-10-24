@@ -1,7 +1,11 @@
-import Block from './Block.ts';
+import Block, { type BlockProps } from './Block.ts';
+
+type BlockInstanceProps<TBlock extends Block> = TBlock extends Block<infer TProps>
+  ? TProps
+  : BlockProps;
 
 export type BlockConstructable<TBlock extends Block = Block> = new (
-  ...args: unknown[]
+  propsWithChildren?: Partial<BlockInstanceProps<TBlock>>
 ) => TBlock;
 
 interface RouteProps {

@@ -23,5 +23,8 @@
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true
   },
+  "ts-node": {
+    "transpileOnly": true
+  },
   "include": ["src", "global.d.ts", ".eslintrc.cjs"]
 }
